@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GameReviews.Application.Common.Interfaces;
+﻿using GameReviews.Application.Common.Interfaces;
 using GameReviews.Domain.Entities.User;
 
 namespace GameReviews.Application.Users.Repository

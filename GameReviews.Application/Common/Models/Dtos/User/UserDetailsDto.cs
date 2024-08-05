@@ -1,4 +1,4 @@
-﻿namespace GameReviews.Application.Common.Models.Dtos;
+﻿namespace GameReviews.Application.Common.Models.Dtos.User;
 
 public class UserDetailsDto
 {

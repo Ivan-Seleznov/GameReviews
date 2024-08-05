@@ -1,5 +1,4 @@
-﻿
-namespace GameReviews.Application.Models;
+﻿namespace GameReviews.Application.Common.Models;
 public class ErrorDetails
 {
     public string Message { get; set; }

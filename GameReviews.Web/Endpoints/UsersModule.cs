@@ -1,10 +1,8 @@
 ﻿using Carter;
-using GameReviews.Application.Common.Models.Dtos;
 using GameReviews.Application.Users.Commands.CreateUser;
 using GameReviews.Application.Users.Queries.GetUser;
 using GameReviews.Domain.Entities.User;
 using MediatR;
-using System;
 
 namespace GameReviews.Web.Endpoints;
 
@@ -20,7 +18,7 @@ public class UsersModule : CarterModule
     {
         app.MapGet("/{id}", async (int id, ISender sender) =>
         {
-            var result = await sender.Send<UserDetailsDto?>(new GetUserQuery(new UserId(id)));
+            var result = await sender.Send(new GetUserQuery(new UserId(id)));
             if (result is null)
             {
                 return Results.BadRequest();
