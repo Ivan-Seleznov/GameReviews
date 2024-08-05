@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GameReviews.Application.Common.Interfaces;
-using GameReviews.Application.Common.Models.Dtos;
+using GameReviews.Application.Common.Interfaces.Command;
+using GameReviews.Application.Common.Models.Dtos.User;
 using GameReviews.Application.Users.Repository;
 using GameReviews.Domain.DomainEvents.UserEvents;
 using GameReviews.Domain.Entities.User;
@@ -8,7 +9,7 @@ using MediatR;
 
 namespace GameReviews.Application.Users.Commands.CreateUser;
 
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserDetailsDto>
+public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserDetailsDto>
 {
     private readonly IUsersRepository _usersRepository;
     private readonly IMapper _mapper;

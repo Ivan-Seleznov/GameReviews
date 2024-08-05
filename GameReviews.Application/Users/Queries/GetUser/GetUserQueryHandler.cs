@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
-using GameReviews.Application.Common.Models.Dtos;
+using GameReviews.Application.Common.Interfaces.Query;
+using GameReviews.Application.Common.Models.Dtos.User;
 using GameReviews.Application.Users.Repository;
 using MediatR;
 
 namespace GameReviews.Application.Users.Queries.GetUser;
 
-public class GetUserQueryHandler : IRequestHandler<GetUserQuery,UserDetailsDto>
+public class GetUserQueryHandler : IQueryHandler<GetUserQuery,UserDetailsDto>
 {
     private readonly IUsersRepository _usersRepository;
     private readonly IMapper _mapper;
