@@ -3,7 +3,6 @@ using System.Text.Json;
 using GameReviews.Application.Common.Models;
 using GameReviews.Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
-
 namespace GameReviews.Web.ExceptionHandlers;
 
 public abstract class BaseExceptionHandler : IExceptionHandler

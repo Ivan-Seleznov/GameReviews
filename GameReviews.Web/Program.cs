@@ -1,7 +1,6 @@
 using Carter;
 using GameReviews.Application;
 using GameReviews.Infrastructure;
-using GameReviews.Infrastructure.Data.Extensions;
 using GameReviews.Web.Extensions;
 using Serilog;
 
@@ -30,7 +29,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    await app.ApplyMigrations();
+    //await app.ApplyMigrations();
 }
 
 app.UseExceptionHandler();

@@ -21,7 +21,7 @@ public class UsersModule : CarterModule
             var result = await sender.Send(new GetUserQuery(new UserId(id)));
             if (result is null)
             {
-                return Results.BadRequest();
+                return Results.NotFound();
             }
 
             return Results.Ok(result);
