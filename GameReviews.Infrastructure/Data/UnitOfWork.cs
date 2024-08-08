@@ -1,4 +1,8 @@
-﻿using GameReviews.Application.Common.Interfaces;
+﻿using System.Data;
+using System.Data.Common;
+using GameReviews.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace GameReviews.Infrastructure.Data;
 
@@ -14,19 +18,9 @@ internal sealed class UnitOfWork : IUnitOfWork
         return _context.SaveChangesAsync();
     }
 
-    /*
-    public Task BeginTransactionAsync(CancellationToken cancellationToken)
-    { 
-        return _context.Database.BeginTransactionAsync();
-    }
-    public Task CommitTransactionAsync(CancellationToken cancellationToken)
+    public async Task<DbTransaction> BeginTransactionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken)
     {
-        return _context.Database.CommitTransactionAsync();
+        var transaction = await _context.Database.BeginTransactionAsync(isolationLevel,cancellationToken);
+        return transaction.GetDbTransaction();
     }
-    public Task RollbackTransactionAsync(CancellationToken cancellationToken)
-    {
-        return _context.Database.RollbackTransactionAsync();
-    }
-    */
 }
-
