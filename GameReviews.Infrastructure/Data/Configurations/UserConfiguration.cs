@@ -1,10 +1,12 @@
 ﻿using GameReviews.Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameReviews.Infrastructure.Data.Configurations;
 
-public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
+internal class UserConfiguration : IEntityTypeConfiguration<UserEntity>
 {
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {

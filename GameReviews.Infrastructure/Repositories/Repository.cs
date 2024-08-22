@@ -1,4 +1,4 @@
-﻿using GameReviews.Application.Common.Interfaces;
+﻿using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Domain.Common;
 using GameReviews.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 namespace GameReviews.Infrastructure.Repositories
 {
     internal abstract class Repository<TEntity,TEntityId>(ApplicationDbContext context) :
-        IRepository<TEntity,TEntityId> 
+        IRepository<TEntity,TEntityId>
+        where TEntityId : IEquatable<TEntityId>
         where TEntity : BaseEntity<TEntityId>
-        where TEntityId : class
     {
         private readonly ApplicationDbContext _context = context;
 
@@ -32,7 +32,7 @@ namespace GameReviews.Infrastructure.Repositories
         }
         public virtual async Task<TEntity?> GetByIdAsync(TEntityId id)
         {
-            return await _context.Set<TEntity>().SingleOrDefaultAsync(e => e.Id == id);
+            return await _context.Set<TEntity>().SingleOrDefaultAsync(e => e.Id.Equals(id));
         }
     }
 }

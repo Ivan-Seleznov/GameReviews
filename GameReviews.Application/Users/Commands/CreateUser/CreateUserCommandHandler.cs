@@ -1,32 +1,55 @@
 ﻿using AutoMapper;
 using GameReviews.Application.Common.Interfaces;
+using GameReviews.Application.Common.Interfaces.Authentication;
 using GameReviews.Application.Common.Interfaces.Command;
+using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.User;
-using GameReviews.Application.Users.Repository;
 using GameReviews.Domain.DomainEvents.UserEvents;
+using GameReviews.Domain.Entities.Roles;
 using GameReviews.Domain.Entities.User;
-using MediatR;
 
 namespace GameReviews.Application.Users.Commands.CreateUser;
 
-public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserDetailsDto>
+internal class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserDetailsDto>
 {
     private readonly IUsersRepository _usersRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    public CreateUserCommandHandler(IUsersRepository usersRepository, IMapper mapper, IUnitOfWork unitOfWork)
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly IRolesRepository _rolesRepository;
+
+    public CreateUserCommandHandler(
+        IUsersRepository usersRepository,
+        IMapper mapper, IUnitOfWork unitOfWork,
+        IPasswordHasher passwordHasher,
+        IRolesRepository rolesRepository)
     {
         _usersRepository = usersRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _passwordHasher = passwordHasher;
+        _rolesRepository = rolesRepository;
     }
 
     public async Task<UserDetailsDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var user = _mapper.Map<UserEntity>(request);
-        user.AddDomainEvent(new UserCreatedDomainEvent(user));
 
+        user.PasswordHash = _passwordHasher.Hash(request.Password);
+        if (request.RoleName is not null)
+        {
+            var role = await _rolesRepository.GetByNameAsync(request.RoleName);
+            if (role is null)
+            {
+                throw new Exception("Role does not exist");
+            }
+
+            user.Roles = new List<Role>() { role };
+        }
+
+        user.AddDomainEvent(new UserCreatedDomainEvent(user));
         var createdUser = await _usersRepository.AddAsync(user);
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<UserDetailsDto>(createdUser);

@@ -1,12 +1,5 @@
-﻿namespace GameReviews.Domain.Entities.User;
+﻿using GameReviews.Domain.Common;
 
-public class UserId
-{
-    public int Value { get; set; }
+namespace GameReviews.Domain.Entities.User;
 
-    public UserId(int value = default)
-    {
-        Value = value;
-    }
-}
-
+public record UserId(int Value) : BaseEntityTypedId<int>(Value);

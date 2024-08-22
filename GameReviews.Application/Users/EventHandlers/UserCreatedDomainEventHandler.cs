@@ -1,4 +1,4 @@
-﻿using GameReviews.Application.Common.Interfaces;
+﻿using GameReviews.Application.Common.Interfaces.Events;
 using GameReviews.Domain.DomainEvents.UserEvents;
 using Microsoft.Extensions.Logging;
 

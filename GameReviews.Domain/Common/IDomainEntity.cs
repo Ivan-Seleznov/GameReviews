@@ -1,6 +1,6 @@
 ﻿namespace GameReviews.Domain.Common;
 
-public interface IEntity
+public interface IDomainEntity
 {
     public IReadOnlyCollection<DomainEvent> DomainEvents { get; }
 
@@ -8,4 +8,3 @@ public interface IEntity
     public void RemoveDomainEvent(DomainEvent domainEvent);
     public void ClearDomainEvents();
 }
-

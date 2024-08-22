@@ -1,5 +1,4 @@
-﻿using GameReviews.Application.Users.Repository;
-using GameReviews.Web.ExceptionHandlers;
+﻿using GameReviews.Web.ExceptionHandlers;
 
 namespace GameReviews.Web.Extensions;
 

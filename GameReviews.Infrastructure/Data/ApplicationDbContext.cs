@@ -23,7 +23,7 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(IGameReviewsInfrastructureMarker).Assembly);
     }
 
     public override int SaveChanges()
@@ -46,7 +46,7 @@ public class ApplicationDbContext : DbContext
 
     private List<DomainEvent> GetDomainEvents()
     {
-        return ChangeTracker.Entries<IEntity>()
+        return ChangeTracker.Entries<IDomainEntity>()
             .Select(e => e.Entity)
             .Where(e => e.DomainEvents.Any())
             .SelectMany(e =>

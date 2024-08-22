@@ -1,7 +1,10 @@
 using Carter;
 using GameReviews.Application;
 using GameReviews.Infrastructure;
+using GameReviews.Infrastructure.Data.Extensions;
 using GameReviews.Web.Extensions;
+using GameReviews.Web.OptionsSetup;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,26 @@ builder.Host.UseSerilog((context, loggerConf) =>
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
+
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        
+        o.Events = new JwtBearerEvents()
+        {
+            OnChallenge = context =>
+            {
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandlers();
@@ -29,12 +52,18 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    //await app.ApplyMigrations();
+    await app.ApplyMigrations();
 }
 
-app.UseExceptionHandler();
+app.UseHttpsRedirection();
+
 app.UseSerilogRequestLogging();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseExceptionHandler();
 
 app.MapCarter();
 
-app.Run();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+app.Run();

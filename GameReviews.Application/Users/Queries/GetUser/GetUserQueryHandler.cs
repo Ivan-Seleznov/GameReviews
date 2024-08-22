@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GameReviews.Application.Common.Interfaces.Query;
+using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.User;
-using GameReviews.Application.Users.Repository;
 using MediatR;
 
 namespace GameReviews.Application.Users.Queries.GetUser;
