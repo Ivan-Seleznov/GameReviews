@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Authentication;
 using GameReviews.Application.Common.Interfaces.Command;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.User;
+using GameReviews.Domain.Common.Result;
+using GameReviews.Domain.Common.Result.Errors;
 using GameReviews.Domain.DomainEvents.UserEvents;
 using GameReviews.Domain.Entities.Roles;
 using GameReviews.Domain.Entities.User;
@@ -31,7 +34,7 @@ internal class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, Use
         _rolesRepository = rolesRepository;
     }
 
-    public async Task<UserDetailsDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UserDetailsDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var user = _mapper.Map<UserEntity>(request);
 
@@ -41,10 +44,10 @@ internal class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, Use
             var role = await _rolesRepository.GetByNameAsync(request.RoleName);
             if (role is null)
             {
-                throw new Exception("Role does not exist");
+                return AuthErrors.RoleNotExist(request.RoleName);
             }
 
-            user.Roles = new List<Role>() { role };
+            user.Roles.Add(role);
         }
 
         user.AddDomainEvent(new UserCreatedDomainEvent(user));

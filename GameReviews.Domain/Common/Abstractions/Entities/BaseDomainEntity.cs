@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace GameReviews.Domain.Common;
+﻿namespace GameReviews.Domain.Common.Abstractions.Entities;
 public abstract class BaseDomainEntity<TEntityId> : BaseEntity<TEntityId>, IDomainEntity
     where TEntityId : IEquatable<TEntityId>
 {

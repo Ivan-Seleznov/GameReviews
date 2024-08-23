@@ -10,6 +10,7 @@ using GameReviews.Domain.Entities.User;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Domain.Entities.Roles;
 using GameReviews.Application.Common.Interfaces.Authentication;
+using GameReviews.Domain.Common.Result;
 
 namespace GameReviews.Application.Users.Commands.RegisterUser;
 internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand,AuthUserDto>
@@ -39,14 +40,20 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<AuthUserDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AuthUserDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new CreateUserCommand(request.Username, request.Email, request.Password, Role.Registered.Name), cancellationToken);
+        if (result.IsFailure)
+        {
+            return result.Error;
+        }
 
-        var userId = new UserId(result.Id);
+        var createdUser = result.Value;
+
+        var userId = new UserId(createdUser.Id);
         var jwtToken = _jwtProvider.GenerateToken(new JwtTokenGenerateRequestDto
         {
-            Email = result.Email, Username = result.Username, Id = userId
+            Email = createdUser.Email, Username = createdUser.Username, Id = userId
         });
 
         var refreshToken = _refreshTokenProvider.GenerateToken(userId);
@@ -55,7 +62,7 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
         return new AuthUserDto
         {
-            User = result,
+            User = createdUser,
             AccessToken = jwtToken,
             RefreshToken = refreshToken.Token
         };

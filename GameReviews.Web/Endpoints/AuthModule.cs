@@ -2,6 +2,7 @@
 using GameReviews.Application.Users.Commands.LoginUser;
 using GameReviews.Application.Users.Commands.RegisterUser;
 using GameReviews.Application.Users.Commands.RefreshUserToken;
+using GameReviews.Web.Extensions;
 using MediatR;
 
 namespace GameReviews.Web.Endpoints;
@@ -15,19 +16,17 @@ public class AuthModule : CarterModule
 
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/login", async (LoginUserCommand loginCommand, CancellationToken cancellationToken, ISender sender) =>
-        {
-            return Results.Ok(await sender.Send(loginCommand, cancellationToken));
-        });
+        app.MapPost("/login",
+            async (LoginUserCommand loginCommand, CancellationToken cancellationToken, ISender sender) =>
+                (await sender.Send(loginCommand, cancellationToken)).WithProblemDetails(x => Results.Ok(x)));
 
-        app.MapPost("/register", async (RegisterUserCommand registerCommand, CancellationToken cancellationToken, ISender sender) =>
-        {
-            return Results.Ok(await sender.Send(registerCommand, cancellationToken));
-        });
+        app.MapPost("/register",
+            async (RegisterUserCommand registerCommand, CancellationToken cancellationToken, ISender sender) =>
+                (await sender.Send(registerCommand, cancellationToken)).WithProblemDetails(x => Results.Ok(x)));
 
-        app.MapPost("/refresh", async (RefreshUserTokenCommand refreshUserTokenCommand, CancellationToken cancellationToken, ISender sender) =>
-        {
-            return Results.Ok(await sender.Send(refreshUserTokenCommand, cancellationToken));
-        });
+        app.MapPost("/refresh",
+            async (RefreshUserTokenCommand refreshUserTokenCommand, CancellationToken cancellationToken,
+                    ISender sender) =>
+                (await sender.Send(refreshUserTokenCommand, cancellationToken)).WithProblemDetails(x => Results.Ok(x)));
     }
 }

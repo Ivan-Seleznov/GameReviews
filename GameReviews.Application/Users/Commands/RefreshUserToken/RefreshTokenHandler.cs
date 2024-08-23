@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using GameReviews.Application.Common;
+using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Authentication;
 using GameReviews.Application.Common.Interfaces.Command;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.Jwt;
 using GameReviews.Application.Common.Models.Dtos.User;
+using GameReviews.Domain.Common.Result;
 
 namespace GameReviews.Application.Users.Commands.RefreshUserToken;
 
@@ -29,20 +31,20 @@ internal sealed class RefreshTokenHandler : ICommandHandler<RefreshUserTokenComm
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<AuthUserDto> Handle(RefreshUserTokenCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AuthUserDto>> Handle(RefreshUserTokenCommand request, CancellationToken cancellationToken)
     {
         var userId = _jwtProvider.GetUserIdFromToken(request.AccessToken);
         var user = await _usersRepository.GetByIdAsync(userId);
 
         if (user is null)
         {
-            throw new Exception("Authorization");
+            return AuthErrors.Authentication();
         }
 
         var refreshToken = await _refreshTokenRepository.GetTokenByUserIdAsync(request.RefreshToken, user.Id);
         if (refreshToken is null || !refreshToken.IsActive)
         {
-            throw new Exception("Authorization");
+            return AuthErrors.Authentication();
         }
         _refreshTokenRepository.Remove(refreshToken);
 

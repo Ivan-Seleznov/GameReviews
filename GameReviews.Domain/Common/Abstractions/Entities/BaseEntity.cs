@@ -1,4 +1,4 @@
-﻿namespace GameReviews.Domain.Common;
+﻿namespace GameReviews.Domain.Common.Abstractions.Entities;
 public abstract class BaseEntity<TEntityId>
     where TEntityId : IEquatable<TEntityId>
 {

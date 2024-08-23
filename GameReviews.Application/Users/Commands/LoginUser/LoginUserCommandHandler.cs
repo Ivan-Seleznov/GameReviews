@@ -6,9 +6,7 @@ using GameReviews.Application.Common.Interfaces.Command;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.Jwt;
 using GameReviews.Application.Common.Models.Dtos.User;
-using GameReviews.Domain.Entities.RefreshToken;
-using GameReviews.Domain.Entities.User;
-using GameReviews.Domain.Exceptions;
+using GameReviews.Domain.Common.Result;
 
 namespace GameReviews.Application.Users.Commands.LoginUser;
 
@@ -40,7 +38,7 @@ internal sealed class LoginUserCommandHandler : ICommandHandler<LoginUserCommand
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<AuthUserDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AuthUserDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetByUsernameAsync(request.Username);
         if (user == null)

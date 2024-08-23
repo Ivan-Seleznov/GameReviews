@@ -13,10 +13,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.HasKey(u => u.Id);
 
         builder.Property(u => u.Id)
-            .HasConversion(userId => userId.Value,
-                value => new UserId(value))
-            .ValueGeneratedOnAdd()
-            .HasIdentityOptions(1, 1);
+            .ValueGeneratedOnAdd();
 
         builder.Ignore(u => u.DomainEvents);
 

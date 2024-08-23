@@ -21,7 +21,6 @@ public static class DependencyInjection
 
         services.AddDbContext<ApplicationDbContext>(opt =>
         {
-            
             opt.UseNpgsql(configuration.GetConnectionString("Default"));
         });
 
@@ -40,4 +39,3 @@ public static class DependencyInjection
         return services;
     }
 }
-

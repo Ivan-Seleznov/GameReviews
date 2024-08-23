@@ -1,5 +1,5 @@
 ﻿using GameReviews.Application.Common.Interfaces.Repositories;
-using GameReviews.Domain.Common;
+using GameReviews.Domain.Common.Abstractions.Entities;
 using GameReviews.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,8 +7,8 @@ namespace GameReviews.Infrastructure.Repositories
 {
     internal abstract class Repository<TEntity,TEntityId>(ApplicationDbContext context) :
         IRepository<TEntity,TEntityId>
-        where TEntityId : IEquatable<TEntityId>
         where TEntity : BaseEntity<TEntityId>
+        where TEntityId : IEquatable<TEntityId>
     {
         private readonly ApplicationDbContext _context = context;
 

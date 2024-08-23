@@ -26,6 +26,5 @@ internal class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken
                 value => new(value))
             .ValueGeneratedOnAdd()
             .HasIdentityOptions(1, 1);
-
     }
 }

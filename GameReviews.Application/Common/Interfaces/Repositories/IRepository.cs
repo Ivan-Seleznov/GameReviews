@@ -1,7 +1,7 @@
-﻿using GameReviews.Domain.Common;
-namespace GameReviews.Application.Common.Interfaces.Repositories;
+﻿using GameReviews.Domain.Common.Abstractions.Entities;
 
-public interface IRepository<TEntity, TEntityId>
+namespace GameReviews.Application.Common.Interfaces.Repositories;
+public interface IRepository<TEntity, in TEntityId>
     where TEntityId : IEquatable<TEntityId>
     where TEntity : BaseEntity<TEntityId>
 {

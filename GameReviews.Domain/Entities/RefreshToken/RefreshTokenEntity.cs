@@ -1,4 +1,4 @@
-﻿using GameReviews.Domain.Common;
+﻿using GameReviews.Domain.Common.Abstractions.Entities;
 using GameReviews.Domain.Entities.User;
 
 namespace GameReviews.Domain.Entities.RefreshToken;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameReviews.Infrastructure.Data.Extensions;
@@ -13,10 +14,16 @@ internal static class ModelBuilderExtensions
     public static ModelBuilder ApplyValueConverters(
         this ModelBuilder modelBuilder,
         Type baseType,
-        Type converterBaseType)
+        Type converterBaseType, 
+        Action<PropertyBuilder>? propertyBuilderFunc = null)
     {
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
+            if (entityType.HasSharedClrType)
+            {
+                continue;
+            }
+
             var properties = entityType.GetProperties()
                 .Where(p => baseType.IsAssignableFrom(p.ClrType));
 
@@ -25,7 +32,12 @@ internal static class ModelBuilderExtensions
                 var concreteType = property.ClrType;
                 var converterType = converterBaseType.MakeGenericType(concreteType);
                 var converter = (ValueConverter)Activator.CreateInstance(converterType)!;
-                modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasConversion(converter);
+
+                var entity = modelBuilder.Entity(entityType.ClrType);
+                var prop = entity.Property(property.Name)
+                    .HasConversion(converter);
+
+                propertyBuilderFunc?.Invoke(prop);
             }
         }
 

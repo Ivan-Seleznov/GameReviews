@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using System.Threading;
-using GameReviews.Domain.Common;
+using GameReviews.Domain.Common.Abstractions.Entities;
 using GameReviews.Domain.Entities.User;
+using GameReviews.Infrastructure.Data.Converters;
+using GameReviews.Infrastructure.Data.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +26,10 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(IGameReviewsInfrastructureMarker).Assembly);
+        modelBuilder.ApplyValueConverters(
+            typeof(BaseEntityTypedId<int>), 
+            typeof(IntToBaseEntityIdConverter<>),
+            x => x.HasIdentityOptions(1, 1));
     }
 
     public override int SaveChanges()

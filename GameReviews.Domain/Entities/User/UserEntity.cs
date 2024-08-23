@@ -1,6 +1,6 @@
-﻿using GameReviews.Domain.Common;
-using GameReviews.Domain.Entities.Roles;
+﻿using GameReviews.Domain.Entities.Roles;
 using GameReviews.Domain.Entities.RefreshToken;
+using GameReviews.Domain.Common.Abstractions.Entities;
 
 
 namespace GameReviews.Domain.Entities.User;
@@ -15,6 +15,6 @@ public class UserEntity : BaseDomainEntity<UserId>
 
     //public ICollection<GameEntity> Games { get; set; }
 
-    public ICollection<Role> Roles { get; set; }
+    public ICollection<Role> Roles { get; set; } = new List<Role>();
 }
 

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using GameReviews.Domain.Common.Abstractions.Entities;
 
 namespace GameReviews.Domain.Common;
 

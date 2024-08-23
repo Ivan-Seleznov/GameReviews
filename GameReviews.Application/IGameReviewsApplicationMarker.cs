@@ -1,6 +1,6 @@
 ﻿namespace GameReviews.Application;
 
 /// <summary>
-/// Assembly marker
+/// Application assembly marker
 /// </summary>
 public interface IGameReviewsApplicationMarker;

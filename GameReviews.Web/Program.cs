@@ -18,20 +18,9 @@ builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
 
-
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(o =>
-    {
-        
-        o.Events = new JwtBearerEvents()
-        {
-            OnChallenge = context =>
-            {
-                return Task.CompletedTask;
-            }
-        };
-    });
+    .AddJwtBearer();
 
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
@@ -54,15 +43,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     await app.ApplyMigrations();
 }
+else
+{
+    app.UseExceptionHandler();
+}
 
 app.UseHttpsRedirection();
-
 app.UseSerilogRequestLogging();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseExceptionHandler();
 
 app.MapCarter();
 
