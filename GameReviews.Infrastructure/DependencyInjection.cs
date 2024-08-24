@@ -4,6 +4,7 @@ using GameReviews.Application.Common.Interfaces.Authentication;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Infrastructure.Authentication;
 using GameReviews.Infrastructure.Data;
+using GameReviews.Infrastructure.Data.Extensions;
 using GameReviews.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -24,9 +25,14 @@ public static class DependencyInjection
             opt.UseNpgsql(configuration.GetConnectionString("Default"));
         });
 
+        //repositories
+        services.AddRepositories();
+        /*
         services.AddScoped<IUsersRepository, UsersRepository>();
-        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IRolesRepository, RolesRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        */
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPermissionService, PermissionService>();
