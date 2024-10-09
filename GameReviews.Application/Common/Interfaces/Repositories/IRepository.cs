@@ -9,4 +9,6 @@ public interface IRepository<TEntity, in TEntityId>
     public TEntity Update(TEntity entity);
     void Remove(TEntity entity);
     Task<TEntity?> GetByIdAsync(TEntityId id);
+    Task<TEntity?> GetByIdNoTrackingAsync(TEntityId id);
+    Task<bool> ExistsAsync(TEntityId id);
 }

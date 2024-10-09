@@ -14,7 +14,7 @@ internal class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder.HasMany(r => r.Permissions)
             .WithMany()
-            .UsingEntity<RolePermission>(); ;
+            .UsingEntity<RolePermission>();
 
         builder.HasMany(r => r.Users)
             .WithMany(r => r.Roles);

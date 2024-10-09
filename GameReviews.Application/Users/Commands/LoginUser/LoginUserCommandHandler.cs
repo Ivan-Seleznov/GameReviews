@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GameReviews.Application.Common;
+using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Authentication;
 using GameReviews.Application.Common.Interfaces.Command;
@@ -43,13 +44,13 @@ internal sealed class LoginUserCommandHandler : ICommandHandler<LoginUserCommand
         var user = await _usersRepository.GetByUsernameAsync(request.Username);
         if (user == null)
         {
-            throw new Exception("User does not exist");
+            return AuthErrors.InvalidCredentials();
         }
 
         var verified = _passwordHasher.Verify(request.Password, user.PasswordHash);
         if (!verified)
         {
-            throw new Exception("User password is incorrect");
+            return AuthErrors.InvalidCredentials();
         }
 
         var jwtToken = _jwtProvider.GenerateToken(_mapper.Map<JwtTokenGenerateRequestDto>(user));

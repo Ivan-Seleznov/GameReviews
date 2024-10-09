@@ -7,4 +7,7 @@ public static class AuthErrors
         => new("Error.RoleNotExist", $"Role with name {roleName} does not exist",ErrorType.NotFound);
     public static Error Authentication()
         => new("Error.Authentication", "Authentication error", ErrorType.Failure);
+
+    public static Error InvalidCredentials()
+        => new("Error.InvalidCredentials", "Invalid login credentials", ErrorType.Failure);
 }

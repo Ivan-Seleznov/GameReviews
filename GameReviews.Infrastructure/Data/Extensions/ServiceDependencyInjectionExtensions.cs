@@ -15,7 +15,7 @@ public static class ServiceDependencyInjectionExtensions
             typeof(IGameReviewsInfrastructureMarker).Assembly
         };
 
-        services.AddTypesFromAssembly(
+        services.AddServicesFromAssemblies(
             assemblies,
             types => types
                 .Where(t => !t.IsInterface && !t.IsAbstract)
@@ -41,15 +41,15 @@ public static class ServiceDependencyInjectionExtensions
                  .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRepository<,>))));
     }
 
-    public static IServiceCollection AddTypesFromAssembly(this IServiceCollection services, Assembly[] assemblies,
-        Func<IEnumerable<Type>, IEnumerable<DiType>> typesFunc, Action<DiType, IServiceCollection> registerServicesFunc)
+    public static IServiceCollection AddServicesFromAssemblies(this IServiceCollection services, Assembly[] assemblies,
+        Func<IEnumerable<Type>, IEnumerable<DiType>> selectTypesFunc, Action<DiType, IServiceCollection> registerTypeAction)
     {
         var types = assemblies.SelectMany(x => x.GetTypes());
-        var diTypes = typesFunc(types);
+        var diTypes = selectTypesFunc(types);
 
         foreach (var diType in diTypes)
         {
-            registerServicesFunc(diType, services);
+            registerTypeAction(diType, services);
         }
 
         return services;

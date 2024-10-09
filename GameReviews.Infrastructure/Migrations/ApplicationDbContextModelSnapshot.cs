@@ -22,6 +22,26 @@ namespace GameReviews.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("GameReviews.Domain.Entities.Game.GameEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1500)
+                        .HasColumnType("character varying(1500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Games", (string)null);
+                });
+
             modelBuilder.Entity("GameReviews.Domain.Entities.RefreshToken.RefreshTokenEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -41,11 +61,56 @@ namespace GameReviews.Infrastructure.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("UserId"), 1L, null, null, null, null, null);
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokenEntity");
+                });
+
+            modelBuilder.Entity("GameReviews.Domain.Entities.Review.ReviewEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("Id"), 1L, null, null, null, null, null);
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("AuthorId"), 1L, null, null, null, null, null);
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("GameId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Rating")
+                        .HasMaxLength(100)
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("AuthorId", "GameId")
+                        .IsUnique();
+
+                    b.ToTable("ReviewEntity", (string)null);
                 });
 
             modelBuilder.Entity("GameReviews.Domain.Entities.Roles.PermissionEntity", b =>
@@ -73,7 +138,7 @@ namespace GameReviews.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "UpdateUser"
+                            Name = "ManageUser"
                         });
                 });
 
@@ -98,6 +163,11 @@ namespace GameReviews.Infrastructure.Migrations
                         {
                             Id = 1,
                             Name = "Registered"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Admin"
                         });
                 });
 
@@ -123,8 +193,13 @@ namespace GameReviews.Infrastructure.Migrations
                         },
                         new
                         {
-                            RoleId = 1,
+                            RoleId = 2,
                             PermissionsId = 2
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            PermissionsId = 1
                         });
                 });
 
@@ -162,6 +237,23 @@ namespace GameReviews.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserGame.GameEntityUserEntity", b =>
+                {
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("UsersId"), 1L, null, null, null, null, null);
+
+                    b.Property<long>("GamesId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("UsersId", "GamesId");
+
+                    b.HasIndex("GamesId");
+
+                    b.ToTable("GameEntityUserEntity", (string)null);
+                });
+
             modelBuilder.Entity("RoleUserEntity", b =>
                 {
                     b.Property<int>("RolesId")
@@ -188,6 +280,25 @@ namespace GameReviews.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("GameReviews.Domain.Entities.Review.ReviewEntity", b =>
+                {
+                    b.HasOne("GameReviews.Domain.Entities.User.UserEntity", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameReviews.Domain.Entities.Game.GameEntity", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Game");
+                });
+
             modelBuilder.Entity("GameReviews.Domain.Entities.Roles.RolePermission", b =>
                 {
                     b.HasOne("GameReviews.Domain.Entities.Roles.PermissionEntity", null)
@@ -199,6 +310,21 @@ namespace GameReviews.Infrastructure.Migrations
                     b.HasOne("GameReviews.Domain.Entities.Roles.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserGame.GameEntityUserEntity", b =>
+                {
+                    b.HasOne("GameReviews.Domain.Entities.Game.GameEntity", null)
+                        .WithMany()
+                        .HasForeignKey("GamesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameReviews.Domain.Entities.User.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

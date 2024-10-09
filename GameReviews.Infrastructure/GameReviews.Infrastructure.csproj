@@ -26,4 +26,13 @@
     <Folder Include="Data\Interceptors\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Igdb.Abstractions">
+      <HintPath>..\..\IgdbApi\IgdbApi\bin\Release\net8.0\Igdb.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="IgdbApi">
+      <HintPath>..\..\IgdbApi\IgdbApi\bin\Release\net8.0\IgdbApi.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

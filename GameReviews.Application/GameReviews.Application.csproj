@@ -14,7 +14,19 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
     <PackageReference Include="MediatR" Version="12.4.0" />
+    <PackageReference Include="MethodTimer.Fody" Version="3.2.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Games\EventHandlers\" />
+    <Folder Include="Reviews\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Igdb.Abstractions">
+      <HintPath>..\..\IgdbApi\IgdbApi\bin\Release\net8.0\Igdb.Abstractions.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

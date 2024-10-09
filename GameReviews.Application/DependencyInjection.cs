@@ -3,6 +3,8 @@ using GameReviews.Application.Common.Behaviours;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using GameReviews.Application.Common;
+using GameReviews.Application.Common.Interfaces;
 
 namespace GameReviews.Application
 {
@@ -21,6 +23,8 @@ namespace GameReviews.Application
             services.AddValidatorsFromAssembly(assembly,includeInternalTypes:true);
 
             services.AddAutoMapper(assembly);
+
+            services.AddScoped<IUserIdStorage, UserIdStorage>();
             return services;
         }
     }

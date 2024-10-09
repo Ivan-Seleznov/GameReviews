@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Game\" />
     <Folder Include="Enumerations\" />
     <Folder Include="Repositories\" />
   </ItemGroup>

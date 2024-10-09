@@ -6,9 +6,7 @@ using GameReviews.Application.Common.Interfaces.Command;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.User;
 using GameReviews.Domain.Common.Result;
-using GameReviews.Domain.Common.Result.Errors;
 using GameReviews.Domain.DomainEvents.UserEvents;
-using GameReviews.Domain.Entities.Roles;
 using GameReviews.Domain.Entities.User;
 
 namespace GameReviews.Application.Users.Commands.CreateUser;

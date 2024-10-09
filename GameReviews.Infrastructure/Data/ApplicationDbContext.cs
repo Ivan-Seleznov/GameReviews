@@ -1,14 +1,14 @@
-﻿using System.Reflection;
-using System.Threading;
-using GameReviews.Domain.Common.Abstractions.Entities;
+﻿using GameReviews.Domain.Common.Abstractions.Entities;
+using GameReviews.Domain.Entities.Game;
+using GameReviews.Domain.Entities.Review;
 using GameReviews.Domain.Entities.User;
+using GameReviews.Domain.Entities.UserGame;
 using GameReviews.Infrastructure.Data.Converters;
 using GameReviews.Infrastructure.Data.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameReviews.Infrastructure.Data;
-
 public class ApplicationDbContext : DbContext
 {
     private readonly IPublisher _publisher;
@@ -20,7 +20,9 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<UserEntity> Users { get; set; }
-
+    public DbSet<GameEntity> Games { get; set; }
+    public DbSet<ReviewEntity> Reviews { get; set; }
+    public DbSet<GameEntityUserEntity> UsersGames { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
