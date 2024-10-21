@@ -49,4 +49,9 @@ public abstract class Repository<TEntity, TEntityId>(ApplicationDbContext contex
     {
         return await _context.Set<TEntity>().AnyAsync(e => e.Id.Equals(id));
     }
+
+    public Task<List<TEntity?>> GetAllAsync(int page, int size)
+    {
+        throw new NotImplementedException();
+    }
 }

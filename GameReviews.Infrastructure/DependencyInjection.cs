@@ -24,6 +24,7 @@ public static class DependencyInjection
         {
             opt.UseNpgsql(configuration.GetConnectionString("Default"));
         });
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
         //repositories
         services.AddRepositories();

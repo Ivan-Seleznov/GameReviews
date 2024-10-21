@@ -1,4 +1,5 @@
-﻿using GameReviews.Domain.Common.Abstractions.Entities;
+﻿using GameReviews.Application.Common.Interfaces;
+using GameReviews.Domain.Common.Abstractions.Entities;
 using GameReviews.Domain.Entities.Game;
 using GameReviews.Domain.Entities.Review;
 using GameReviews.Domain.Entities.User;
@@ -9,7 +10,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameReviews.Infrastructure.Data;
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     private readonly IPublisher _publisher;
 

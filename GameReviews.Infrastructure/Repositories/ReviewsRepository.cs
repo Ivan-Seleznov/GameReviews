@@ -4,6 +4,7 @@ using GameReviews.Domain.Entities.Review;
 using GameReviews.Domain.Entities.User;
 using GameReviews.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace GameReviews.Infrastructure.Repositories;
 internal class ReviewsRepository(ApplicationDbContext context) : Repository<ReviewEntity, ReviewId>(context), IReviewsRepository

@@ -2,6 +2,7 @@
 using GameReviews.Application.Common.Models.Dtos.Game;
 using GameReviews.Application.Games.Commands;
 using GameReviews.Application.Games.Queries.GetGame;
+using GameReviews.Application.Games.Queries.SearchGames;
 using GameReviews.Domain.Common.Authorization;
 using GameReviews.Domain.Common.Result;
 using GameReviews.Domain.Entities.Game;
@@ -33,5 +34,12 @@ public class GamesModule : CarterModule
             })
             .Produces<GameDetailsDto>()
             .RequireAuthorization(new[] { Permission.ManageUser.ToString() });
+
+        app.MapGet("/search", async (string searchTerm, int? page, int? pageSize, ISender sender) =>
+        {
+            return (await sender.Send(new SearchGamesQuery(searchTerm, page, pageSize)))
+                .WithProblemDetails(x => Results.Ok(x)!);
+        })
+        .Produces<List<GameDetailsDto>>();
     }
 }
