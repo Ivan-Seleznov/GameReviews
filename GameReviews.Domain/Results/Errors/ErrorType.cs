@@ -1,4 +1,4 @@
-﻿namespace GameReviews.Domain.Common.Result.Errors;
+﻿namespace GameReviews.Domain.Results.Errors;
 public enum ErrorType
 {
     Failure,

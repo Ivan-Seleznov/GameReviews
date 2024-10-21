@@ -1,7 +1,7 @@
-﻿namespace GameReviews.Domain.Common.Result.Errors;
+﻿namespace GameReviews.Domain.Results.Errors;
 public record Error
 {
-    public static readonly Error None = new (string.Empty, string.Empty, ErrorType.Failure);
+    public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
     public static readonly Error NullValue = new("The result value is null", string.Empty, ErrorType.Failure);
 
     public Error(string code, string message, ErrorType errorType)

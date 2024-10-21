@@ -10,7 +10,7 @@ using GameReviews.Domain.Entities.User;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Domain.Entities.Roles;
 using GameReviews.Application.Common.Interfaces.Authentication;
-using GameReviews.Domain.Common.Result;
+using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Users.Commands.RegisterUser;
 internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand,AuthUserDto>

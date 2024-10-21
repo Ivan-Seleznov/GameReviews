@@ -1,4 +1,4 @@
-﻿namespace GameReviews.Domain.Common.Result.Errors;
+﻿namespace GameReviews.Domain.Results.Errors;
 public record ValidationError : Error
 {
     public ValidationError(string code, string message, IDictionary<string, string[]> errors, ErrorType errorType) : base(code, message, errorType)

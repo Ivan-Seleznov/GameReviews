@@ -4,8 +4,6 @@ using GameReviews.Application.Users.Commands.AddGame;
 using GameReviews.Application.Users.Commands.CreateUser;
 using GameReviews.Application.Users.Queries.GetUser;
 using GameReviews.Domain.Common.Authorization;
-using GameReviews.Domain.Common.Result;
-using GameReviews.Domain.Entities.Game;
 using GameReviews.Domain.Entities.User;
 using GameReviews.Web.Extensions;
 using MediatR;

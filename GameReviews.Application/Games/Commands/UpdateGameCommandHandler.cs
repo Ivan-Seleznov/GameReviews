@@ -4,7 +4,7 @@ using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Command;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.Game;
-using GameReviews.Domain.Common.Result;
+using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Games.Commands;
 internal class UpdateGameCommandHandler : ICommandHandler<UpdateGameCommand,GameDetailsDto>

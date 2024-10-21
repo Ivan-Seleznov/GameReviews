@@ -4,7 +4,6 @@ using GameReviews.Application.Games.Commands;
 using GameReviews.Application.Games.Queries.GetGame;
 using GameReviews.Application.Games.Queries.SearchGames;
 using GameReviews.Domain.Common.Authorization;
-using GameReviews.Domain.Common.Result;
 using GameReviews.Domain.Entities.Game;
 using GameReviews.Web.Extensions;
 using MediatR;

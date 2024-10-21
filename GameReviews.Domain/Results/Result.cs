@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using GameReviews.Domain.Common.Result.Errors;
+using GameReviews.Domain.Results.Errors;
 
-namespace GameReviews.Domain.Common.Result;
+namespace GameReviews.Domain.Results;
 public class Result
 {
     protected Result(bool isSuccess, Error error)
@@ -19,11 +19,11 @@ public class Result
 
     public Error Error { get; }
 
-    public static Result Success() => new (true, Error.None);
-    public static Result<T> Success<T>(T value) => new (true, Error.None, value);
+    public static Result Success() => new(true, Error.None);
+    public static Result<T> Success<T>(T value) => new(true, Error.None, value);
 
-    public static Result Failure(Error error) => new (false, error);
-    public static Result<T> Failure<T>(Error error) => new (false, error, default!);
+    public static Result Failure(Error error) => new(false, error);
+    public static Result<T> Failure<T>(Error error) => new(false, error, default!);
 }
 
 public class Result<T> : Result
@@ -43,5 +43,5 @@ public class Result<T> : Result
     public static implicit operator Result<T>(T? value) =>
         value is not null ? Success(value) : Failure<T>(Error.NullValue);
 
-    public static implicit operator Result<T>(Error error) => Result.Failure<T>(error);
+    public static implicit operator Result<T>(Error error) => Failure<T>(error);
 }

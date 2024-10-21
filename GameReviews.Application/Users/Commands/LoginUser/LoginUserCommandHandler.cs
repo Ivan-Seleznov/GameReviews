@@ -7,7 +7,7 @@ using GameReviews.Application.Common.Interfaces.Command;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.Jwt;
 using GameReviews.Application.Common.Models.Dtos.User;
-using GameReviews.Domain.Common.Result;
+using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Users.Commands.LoginUser;
 

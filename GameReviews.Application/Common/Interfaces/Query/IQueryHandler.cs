@@ -1,4 +1,4 @@
-﻿using GameReviews.Domain.Common.Result;
+﻿using GameReviews.Domain.Results;
 using MediatR;
 
 namespace GameReviews.Application.Common.Interfaces.Query;

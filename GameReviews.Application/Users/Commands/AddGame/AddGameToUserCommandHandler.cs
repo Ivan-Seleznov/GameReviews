@@ -1,6 +1,5 @@
 ﻿using GameReviews.Application.Common.Interfaces.Command;
 using GameReviews.Application.Common.Interfaces.Repositories;
-using GameReviews.Domain.Common.Result;
 using AutoMapper;
 using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces;
@@ -8,6 +7,7 @@ using GameReviews.Application.Common.Models.Dtos.Game;
 using GameReviews.Application.Games.Queries.GetGame;
 using GameReviews.Domain.Entities.Game;
 using MediatR;
+using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Users.Commands.AddGame;
 internal class AddGameToUserCommandHandler : ICommandHandler<AddGameToUserCommand,GameDetailsDto>

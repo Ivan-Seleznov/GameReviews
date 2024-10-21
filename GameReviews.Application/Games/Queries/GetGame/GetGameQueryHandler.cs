@@ -2,7 +2,7 @@
 using GameReviews.Application.Common.Interfaces.Query;
 using GameReviews.Application.Common.Models.Dtos.Game;
 using GameReviews.Application.Common.Models.Dtos.Image;
-using GameReviews.Domain.Common.Result;
+using GameReviews.Domain.Results;
 using Igdb.Abstractions;
 using Igdb.Abstractions.Extensions.Images;
 

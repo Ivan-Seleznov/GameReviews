@@ -1,5 +1,5 @@
-﻿using GameReviews.Domain.Common.Result;
-using GameReviews.Domain.Common.Result.Errors;
+﻿using GameReviews.Domain.Results;
+using GameReviews.Domain.Results.Errors;
 namespace GameReviews.Web.Common.Results;
 
 public static class ApiResults

@@ -1,4 +1,4 @@
-﻿using GameReviews.Domain.Common.Result.Errors;
+﻿using GameReviews.Domain.Results.Errors;
 
 namespace GameReviews.Application.Common.Errors;
 public static class ValidationErrors

@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using GameReviews.Domain.Common.Result;
 using MediatR;
 using System.Reflection;
 using GameReviews.Application.Common.Errors;
+using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Common.Behaviours;
 internal class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>

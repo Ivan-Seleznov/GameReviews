@@ -5,9 +5,9 @@ using GameReviews.Application.Common.Interfaces.Command;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.Review;
 using GameReviews.Application.Games.Queries.GetGame;
-using GameReviews.Domain.Common.Result;
 using GameReviews.Domain.Entities.Game;
 using GameReviews.Domain.Entities.Review;
+using GameReviews.Domain.Results;
 using MediatR;
 using MethodTimer;
 

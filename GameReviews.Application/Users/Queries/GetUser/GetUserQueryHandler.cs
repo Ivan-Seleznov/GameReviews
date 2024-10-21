@@ -3,7 +3,7 @@ using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces.Query;
 using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.User;
-using GameReviews.Domain.Common.Result;
+using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Users.Queries.GetUser;
 public class GetUserQueryHandler : IQueryHandler<GetUserQuery,UserDetailsDto>

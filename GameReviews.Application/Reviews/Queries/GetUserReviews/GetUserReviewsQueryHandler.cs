@@ -4,8 +4,8 @@ using GameReviews.Application.Common;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Query;
 using GameReviews.Application.Common.Models.Dtos.Review;
-using GameReviews.Domain.Common.Result;
 using GameReviews.Domain.Entities.Review;
+using GameReviews.Domain.Results;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

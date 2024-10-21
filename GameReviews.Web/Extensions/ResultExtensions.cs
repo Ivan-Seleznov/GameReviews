@@ -1,4 +1,4 @@
-﻿using GameReviews.Domain.Common.Result;
+﻿using GameReviews.Domain.Results;
 using GameReviews.Web.Common.Results;
 
 namespace GameReviews.Web.Extensions;
