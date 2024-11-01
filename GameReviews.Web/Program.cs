@@ -1,6 +1,7 @@
 using Carter;
 using GameReviews.Application;
 using GameReviews.Application.Common.Logger;
+using GameReviews.Domain;
 using GameReviews.Infrastructure;
 using GameReviews.Infrastructure.Data.Extensions;
 using GameReviews.Web.Extensions;
@@ -17,8 +18,9 @@ builder.Host.UseSerilog((context, loggerConf) =>
 });
 
 builder.Services
+    .AddInfrastructure(builder.Configuration)
     .AddApplication()
-    .AddInfrastructure(builder.Configuration);
+    .AddDomain();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

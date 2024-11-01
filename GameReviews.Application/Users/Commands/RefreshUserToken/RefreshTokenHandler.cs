@@ -4,33 +4,33 @@ using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Authentication;
 using GameReviews.Application.Common.Interfaces.Command;
-using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.Jwt;
 using GameReviews.Application.Common.Models.Dtos.User;
+using GameReviews.Domain.Common.Abstractions.Repositories;
 using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Users.Commands.RefreshUserToken;
 
 internal sealed class RefreshTokenHandler : ICommandHandler<RefreshUserTokenCommand, AuthUserDto>
 {
-    private readonly IRefreshTokenProvider _refreshTokenProvider;
+    private readonly IRefreshTokenGenerator _refreshTokenGenerator;
     private readonly IJwtProvider _jwtProvider;
-    private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly IUsersRepository _usersRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    public RefreshTokenHandler(IRefreshTokenProvider refreshTokenProvider, IJwtProvider jwtProvider,
-        IRefreshTokenRepository refreshTokenRepository, IUsersRepository usersRepository, IMapper mapper,
+    public RefreshTokenHandler(
+        IRefreshTokenGenerator refreshTokenGenerator, 
+        IJwtProvider jwtProvider, 
+        IUsersRepository usersRepository,
+        IMapper mapper,
         IUnitOfWork unitOfWork)
     {
-        _refreshTokenProvider = refreshTokenProvider;
+        _refreshTokenGenerator = refreshTokenGenerator;
         _jwtProvider = jwtProvider;
-        _refreshTokenRepository = refreshTokenRepository;
         _usersRepository = usersRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
-
     public async Task<Result<AuthUserDto>> Handle(RefreshUserTokenCommand request, CancellationToken cancellationToken)
     {
         var userId = _jwtProvider.GetUserIdFromToken(request.AccessToken);
@@ -41,19 +41,16 @@ internal sealed class RefreshTokenHandler : ICommandHandler<RefreshUserTokenComm
             return AuthErrors.Authentication();
         }
 
-        var refreshToken = await _refreshTokenRepository.GetTokenByUserIdAsync(request.RefreshToken, user.Id);
-        if (refreshToken is null || !refreshToken.IsActive)
+        var newRefreshToken = _refreshTokenGenerator.GenerateToken();
+        var updateTokenResult = user.UpdateRefreshToken(request.RefreshToken, newRefreshToken.Token, newRefreshToken.ExpiresIn);
+        if (!updateTokenResult.IsFailure)
         {
             return AuthErrors.Authentication();
         }
-        _refreshTokenRepository.Remove(refreshToken);
-
-        var newRefreshToken = _refreshTokenProvider.GenerateToken(userId);
-        var jwtToken = _jwtProvider.GenerateToken(_mapper.Map<JwtTokenGenerateRequestDto>(user));
-
-        await _refreshTokenRepository.AddAsync(newRefreshToken);
+        
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+        var jwtToken = _jwtProvider.GenerateToken(_mapper.Map<JwtTokenGenerateRequestDto>(user));
         return new AuthUserDto()
         {
             AccessToken = jwtToken,

@@ -9,7 +9,7 @@ public static class WebApplicationDataExtensions
     {
         await using var scope = app.Services.CreateAsyncScope();
 
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationWriteDbContext>();
         await context.Database.MigrateAsync();
 
         return app;

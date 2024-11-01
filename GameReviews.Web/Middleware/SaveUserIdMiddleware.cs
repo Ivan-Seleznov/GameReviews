@@ -1,6 +1,7 @@
 ﻿using GameReviews.Application.Common.Interfaces;
-using GameReviews.Domain.Entities.User;
 using System.Security.Claims;
+using GameReviews.Domain.Entities.UserAggregate;
+using GameReviews.Domain.Entities.UserAggregate.Entities;
 
 namespace GameReviews.Web.Middleware;
 public class SaveUserIdMiddleware

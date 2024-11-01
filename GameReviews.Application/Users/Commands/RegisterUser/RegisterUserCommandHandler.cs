@@ -5,21 +5,23 @@ using GameReviews.Application.Common.Models.Dtos.User;
 using MediatR;
 using GameReviews.Application.Common;
 using GameReviews.Application.Common.Models.Dtos.Jwt;
-using GameReviews.Application.Users.Commands.CreateUser;
-using GameReviews.Domain.Entities.User;
-using GameReviews.Application.Common.Interfaces.Repositories;
-using GameReviews.Domain.Entities.Roles;
 using GameReviews.Application.Common.Interfaces.Authentication;
+using GameReviews.Domain.Common.Abstractions.Repositories;
+using GameReviews.Domain.Common.Abstractions.Services;
+using GameReviews.Domain.Entities.RolesAggregate.Entities;
+using GameReviews.Domain.Entities.UserAggregate.Entities;
 using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Users.Commands.RegisterUser;
 internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand,AuthUserDto>
 {
     private readonly IJwtProvider _jwtProvider;
-    private readonly IRefreshTokenProvider _refreshTokenProvider;
-    private readonly IRefreshTokenRepository _refreshTokenRepository;
+    private readonly IRefreshTokenGenerator _refreshTokenGenerator;
     private readonly IUnitOfWork _unitOfWork;
-
+    private readonly IUsersRepository _usersRepository;
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly IUserRoleAssignmentService _roleAssignmentService;
+    
     private readonly IMapper _mapper;
     private readonly ISender _sender;
 
@@ -28,41 +30,57 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
         IMapper mapper, 
         ISender sender,
         IPasswordHasher passwordHasher,
-        IRefreshTokenProvider refreshToken, 
-        IRefreshTokenRepository refreshTokenRepository, 
-        IUnitOfWork unitOfWork)
+        IRefreshTokenGenerator refreshToken, 
+        IUnitOfWork unitOfWork,
+        IUsersRepository usersRepository,
+        IUserRoleAssignmentService roleAssignmentService)
     {
         _jwtProvider = jwtProvider;
         _mapper = mapper;
         _sender = sender;
-        _refreshTokenProvider = refreshToken;
-        _refreshTokenRepository = refreshTokenRepository;
+        _refreshTokenGenerator = refreshToken;
         _unitOfWork = unitOfWork;
+        _usersRepository = usersRepository;
+        _passwordHasher = passwordHasher;
+        _roleAssignmentService = roleAssignmentService;
     }
 
     public async Task<Result<AuthUserDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new CreateUserCommand(request.Username, request.Email, request.Password, Role.Registered.Name), cancellationToken);
-        if (result.IsFailure)
+        var userResult = await UserEntity.CreateAsync(
+            request.Username, 
+            request.Email, 
+            _passwordHasher.Hash(request.Password),
+            _usersRepository);
+        
+        if (userResult.IsFailure)
         {
-            return result.Error;
+            return userResult.Error;
         }
-
-        var createdUser = result.Value;
-
-        var userId = new UserId(createdUser.Id);
+        
+        var user = userResult.Value;
+        await _usersRepository.AddAsync(user);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        var assignmentResult  = await _roleAssignmentService.AssignRoleToUserAsync(user.Id, Role.Registered.Name);
+        if (assignmentResult.IsFailure)
+        {
+            return assignmentResult.Error;
+        }
+        
         var jwtToken = _jwtProvider.GenerateToken(new JwtTokenGenerateRequestDto
         {
-            Email = createdUser.Email, Username = createdUser.Username, Id = userId
+            Email = user.Email, Username = user.Username, Id = user.Id
         });
 
-        var refreshToken = _refreshTokenProvider.GenerateToken(userId);
-        await _refreshTokenRepository.AddAsync(refreshToken);
+        var refreshToken = _refreshTokenGenerator.GenerateToken();
+        user.AddRefreshToken(refreshToken.Token, refreshToken.ExpiresIn);
+        
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new AuthUserDto
         {
-            User = createdUser,
+            User = _mapper.Map<UserDetailsDto>(user),
             AccessToken = jwtToken,
             RefreshToken = refreshToken.Token
         };

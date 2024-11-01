@@ -20,4 +20,6 @@ public static class ResultExtensions
         Matches(result, onSuccessResult, ApiResults.CreateProblemDetails);
     public static IResult WithProblemDetails<TIn>(this Result<TIn> result, Func<TIn, IResult> onSuccessResult) =>
         Matches(result, onSuccessResult, ApiResults.CreateProblemDetails);
+    public static IResult OkOrProblemDetails<TIn>(this Result<TIn> result) =>
+        Matches(result, x => Microsoft.AspNetCore.Http.Results.Ok(x!), ApiResults.CreateProblemDetails);
 }

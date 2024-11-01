@@ -1,16 +1,16 @@
-﻿using GameReviews.Application.Common.Interfaces.Repositories;
-using GameReviews.Domain.Common.Abstractions.Entities;
+﻿using GameReviews.Domain.Common.Abstractions.Entities;
+using GameReviews.Domain.Common.Abstractions.Repositories;
 using GameReviews.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameReviews.Infrastructure.Repositories;
 
-public abstract class Repository<TEntity, TEntityId>(ApplicationDbContext context) :
+public abstract class Repository<TEntity, TEntityId>(ApplicationWriteDbContext context) :
     IRepository<TEntity, TEntityId>
     where TEntity : BaseEntity<TEntityId>
     where TEntityId : IEquatable<TEntityId>
 {
-    private readonly ApplicationDbContext _context = context;
+    private readonly ApplicationWriteDbContext _context = context;
 
     public void Add(TEntity entity)
     {

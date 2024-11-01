@@ -3,10 +3,12 @@ using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Authentication;
 using GameReviews.Application.Common.Interfaces.Command;
-using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.User;
+using GameReviews.Domain.Common.Abstractions.Repositories;
+using GameReviews.Domain.Common.Abstractions.Services;
 using GameReviews.Domain.DomainEvents.UserEvents;
-using GameReviews.Domain.Entities.User;
+using GameReviews.Domain.Entities.UserAggregate;
+using GameReviews.Domain.Entities.UserAggregate.Entities;
 using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Users.Commands.CreateUser;
@@ -18,10 +20,11 @@ internal class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, Use
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IRolesRepository _rolesRepository;
-
+    private readonly IUserRoleAssignmentService _userRoleAssignmentService;
     public CreateUserCommandHandler(
         IUsersRepository usersRepository,
-        IMapper mapper, IUnitOfWork unitOfWork,
+        IMapper mapper,
+        IUnitOfWork unitOfWork,
         IPasswordHasher passwordHasher,
         IRolesRepository rolesRepository)
     {
@@ -34,25 +37,30 @@ internal class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, Use
 
     public async Task<Result<UserDetailsDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = _mapper.Map<UserEntity>(request);
-
-        user.PasswordHash = _passwordHasher.Hash(request.Password);
+        var userResult = await UserEntity.CreateAsync(
+            request.Username,
+            request.Email,
+            _passwordHasher.Hash(request.Password),
+            _usersRepository);
+        
+        if (userResult.IsFailure)
+        {
+            return userResult.Error;
+        }
+        
+        var user = userResult.Value;
         if (request.RoleName is not null)
         {
-            var role = await _rolesRepository.GetByNameAsync(request.RoleName);
-            if (role is null)
+            var roleAssignmentResult = await _userRoleAssignmentService.AssignRoleToUserAsync(user.Id, request.RoleName);
+            if (roleAssignmentResult.IsFailure)
             {
-                return AuthErrors.RoleNotExist(request.RoleName);
+                return roleAssignmentResult.Error;
             }
-
-            user.Roles.Add(role);
         }
 
-        user.AddDomainEvent(new UserCreatedDomainEvent(user));
         var createdUser = await _usersRepository.AddAsync(user);
-
+        
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
         return _mapper.Map<UserDetailsDto>(createdUser);
     }
 }

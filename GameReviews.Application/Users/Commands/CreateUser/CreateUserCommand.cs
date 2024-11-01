@@ -1,6 +1,5 @@
 ﻿using GameReviews.Application.Common.Interfaces.Command;
 using GameReviews.Application.Common.Models.Dtos.User;
-using GameReviews.Domain.Entities.Roles;
 
 namespace GameReviews.Application.Users.Commands.CreateUser;
 

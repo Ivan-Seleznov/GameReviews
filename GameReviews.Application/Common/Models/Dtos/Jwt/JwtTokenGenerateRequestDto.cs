@@ -1,4 +1,5 @@
-﻿using GameReviews.Domain.Entities.User;
+﻿using GameReviews.Domain.Entities.UserAggregate;
+using GameReviews.Domain.Entities.UserAggregate.Entities;
 
 namespace GameReviews.Application.Common.Models.Dtos.Jwt;
 

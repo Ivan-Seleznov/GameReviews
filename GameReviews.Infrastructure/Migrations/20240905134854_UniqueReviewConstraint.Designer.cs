@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GameReviews.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ApplicationWriteDbContext))]
     [Migration("20240905134854_UniqueReviewConstraint")]
     partial class UniqueReviewConstraint
     {

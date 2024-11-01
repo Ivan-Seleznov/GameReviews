@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameReviews.Infrastructure.Data.Converters;
 internal class IntToBaseEntityIdConverter<T> : ValueConverter<T, int>
-    where T : BaseEntityTypedId<int>
+    where T : EntityId<int>
 {
     public IntToBaseEntityIdConverter() : this(null)
     {

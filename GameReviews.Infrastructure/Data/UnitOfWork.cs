@@ -8,19 +8,25 @@ namespace GameReviews.Infrastructure.Data;
 
 internal sealed class UnitOfWork : IUnitOfWork
 {
-    private readonly ApplicationDbContext _context;
-    public UnitOfWork(ApplicationDbContext context)
+    private readonly ApplicationWriteDbContext _context;
+    public UnitOfWork(ApplicationWriteDbContext context)
     {
         _context = context;
     }
     public Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return _context.SaveChangesAsync();
+        return _context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<DbTransaction> BeginTransactionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken)
     {
-        var transaction = await _context.Database.BeginTransactionAsync(isolationLevel,cancellationToken);
+        var transaction = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
         return transaction.GetDbTransaction();
     }
+
+    public IExecutionStrategy CreateExecutionStrategy() =>
+        _context.Database.CreateExecutionStrategy();
+
+    public IDbContextTransaction? GetCurrentTransaction() => 
+        _context.Database.CurrentTransaction;
 }

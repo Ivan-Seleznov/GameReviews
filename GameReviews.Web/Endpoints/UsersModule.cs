@@ -1,10 +1,17 @@
 ﻿using Carter;
+using GameReviews.Application.Common;
+using GameReviews.Application.Common.Models.Dtos.Game;
+using GameReviews.Application.Common.Models.Dtos.Review;
 using GameReviews.Application.Common.Models.Dtos.User;
+using GameReviews.Application.Games.Queries.GetGames;
+using GameReviews.Application.Games.Queries.GetUserGames;
+using GameReviews.Application.Reviews.Queries.GetUserReviews;
 using GameReviews.Application.Users.Commands.AddGame;
 using GameReviews.Application.Users.Commands.CreateUser;
 using GameReviews.Application.Users.Queries.GetUser;
 using GameReviews.Domain.Common.Authorization;
-using GameReviews.Domain.Entities.User;
+using GameReviews.Domain.Entities.UserAggregate;
+using GameReviews.Domain.Entities.UserAggregate.Entities;
 using GameReviews.Web.Extensions;
 using MediatR;
 
@@ -27,7 +34,7 @@ public class UsersModule : CarterModule
             })
             .WithName("GetUser")
             .Produces<UserDetailsDto>()
-            .RequireAuthorization(new[] { Permission.ReadUser.ToString() });
+            .RequireAuthorization(Permission.ReadUser.ToString());
 
         app.MapPost("/", async (CreateUserCommand command, ISender sender) =>
             {
@@ -38,16 +45,17 @@ public class UsersModule : CarterModule
                             new { id = x.Id }, x));
             })
             .Produces<UserDetailsDto>(StatusCodes.Status201Created)
-            .RequireAuthorization(new[] { Permission.ManageUser.ToString() });
+            .RequireAuthorization(Permission.ManageUser.ToString());
 
-
-        var gamesGroup = app.MapGroup("/games")
-            .RequireAuthorization(new[] { Permission.ReadUser.ToString() });
-
-        gamesGroup.MapPost("/", async (AddGameToUserCommand adGameToUserCommand, ISender sender) =>
-        {
-            var result = await sender.Send(adGameToUserCommand);
-            return result.WithProblemDetails(x => Results.Ok(x));
-        });
+        
+        app.MapGet("/reviews", async ([AsParameters]GetUserReviewsQuery query, ISender sender) => 
+            (await sender.Send(query)).OkOrProblemDetails())
+            .RequireAuthorization(Permission.ReadUser.ToString())
+            .Produces<PagedList<ReviewDetailsDto>>();
+        
+        app.MapGet("/games", async ([AsParameters]GetUserGamesQuery query, ISender sender) =>
+            (await sender.Send(query)).OkOrProblemDetails())
+            .RequireAuthorization(Permission.ReadUser.ToString())
+            .Produces<PagedList<GameInfoDto>>();
     }
 }

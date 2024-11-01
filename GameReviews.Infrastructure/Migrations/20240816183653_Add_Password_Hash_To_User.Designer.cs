@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GameReviews.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ApplicationWriteDbContext))]
     [Migration("20240816183653_Add_Password_Hash_To_User")]
     partial class Add_Password_Hash_To_User
     {

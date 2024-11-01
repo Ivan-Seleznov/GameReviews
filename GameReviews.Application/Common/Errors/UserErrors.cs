@@ -1,5 +1,6 @@
-﻿using GameReviews.Domain.Entities.Game;
-using GameReviews.Domain.Entities.User;
+﻿using GameReviews.Domain.Entities.GameAggregate.Entities;
+using GameReviews.Domain.Entities.UserAggregate;
+using GameReviews.Domain.Entities.UserAggregate.Entities;
 using GameReviews.Domain.Results.Errors;
 
 namespace GameReviews.Application.Common.Errors;

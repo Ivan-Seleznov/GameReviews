@@ -19,13 +19,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\MappingProfiles\NewFolder\" />
     <Folder Include="Games\EventHandlers\" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Idgb.Abstractions.General">
+      <HintPath>..\..\IgdbApi\Idgb.Abstractions.General\bin\Release\net8.0\Idgb.Abstractions.General.dll</HintPath>
+    </Reference>
     <Reference Include="Igdb.Abstractions">
       <HintPath>..\..\IgdbApi\IgdbApi\bin\Release\net8.0\Igdb.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Igdb.QueryBuilder">
+      <HintPath>..\..\IgdbApi\Igdb.QeuryBuilder\bin\Release\net8.0\Igdb.QueryBuilder.dll</HintPath>
     </Reference>
   </ItemGroup>
 

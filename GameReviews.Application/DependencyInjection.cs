@@ -6,26 +6,27 @@ using System.Reflection;
 using GameReviews.Application.Common;
 using GameReviews.Application.Common.Interfaces;
 
-namespace GameReviews.Application
+namespace GameReviews.Application;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        var assembly = typeof(IGameReviewsApplicationMarker).Assembly;
+
+        services.AddMediatR(conf =>
         {
-            var assembly = typeof(IGameReviewsApplicationMarker).Assembly;
+            conf.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            
+            conf.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
+            conf.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+        });
 
-            services.AddMediatR(conf => 
-            {
-                conf.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                conf.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-            });
+        services.AddValidatorsFromAssembly(assembly, includeInternalTypes: true);
 
-            services.AddValidatorsFromAssembly(assembly,includeInternalTypes:true);
+        services.AddAutoMapper(assembly);
 
-            services.AddAutoMapper(assembly);
-
-            services.AddScoped<IUserIdStorage, UserIdStorage>();
-            return services;
-        }
+        services.AddScoped<IUserIdStorage, UserIdStorage>();
+        return services;
     }
 }

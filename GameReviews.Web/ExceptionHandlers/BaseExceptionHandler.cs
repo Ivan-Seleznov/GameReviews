@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using GameReviews.Application.Common.Models;
+using GameReviews.Application.Common.Models.Dtos;
 using GameReviews.Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 namespace GameReviews.Web.ExceptionHandlers;

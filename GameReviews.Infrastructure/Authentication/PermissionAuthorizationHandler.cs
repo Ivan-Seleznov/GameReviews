@@ -1,8 +1,9 @@
-﻿using GameReviews.Domain.Entities.User;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.Security.Claims;
+using GameReviews.Domain.Entities.UserAggregate;
+using GameReviews.Domain.Entities.UserAggregate.Entities;
 
 namespace GameReviews.Infrastructure.Authentication;
 public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>

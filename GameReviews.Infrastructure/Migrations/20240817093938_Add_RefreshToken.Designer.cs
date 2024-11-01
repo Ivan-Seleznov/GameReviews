@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GameReviews.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ApplicationWriteDbContext))]
     [Migration("20240817093938_Add_RefreshToken")]
     partial class Add_RefreshToken
     {

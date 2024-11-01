@@ -4,9 +4,9 @@ using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Authentication;
 using GameReviews.Application.Common.Interfaces.Command;
-using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.Jwt;
 using GameReviews.Application.Common.Models.Dtos.User;
+using GameReviews.Domain.Common.Abstractions.Repositories;
 using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Users.Commands.LoginUser;
@@ -17,25 +17,21 @@ internal sealed class LoginUserCommandHandler : ICommandHandler<LoginUserCommand
     private readonly IJwtProvider _jwtProvider;
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
-    private readonly IRefreshTokenProvider _refreshTokenProvider;
-    private readonly IRefreshTokenRepository _refreshTokenRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRefreshTokenGenerator _refreshTokenGenerator; private readonly IUnitOfWork _unitOfWork;
 
     public LoginUserCommandHandler(
         IUsersRepository usersRepository,
         IJwtProvider jwtProvider,
         IMapper mapper,
         IPasswordHasher passwordHasher,
-        IRefreshTokenProvider refreshTokenProvider,
-        IRefreshTokenRepository refreshTokenRepository,
+        IRefreshTokenGenerator refreshTokenGenerator,
         IUnitOfWork unitOfWork)
     {
         _usersRepository = usersRepository;
         _jwtProvider = jwtProvider;
         _mapper = mapper;
         _passwordHasher = passwordHasher;
-        _refreshTokenProvider = refreshTokenProvider;
-        _refreshTokenRepository = refreshTokenRepository;
+        _refreshTokenGenerator = refreshTokenGenerator;
         _unitOfWork = unitOfWork;
     }
 
@@ -54,10 +50,11 @@ internal sealed class LoginUserCommandHandler : ICommandHandler<LoginUserCommand
         }
 
         var jwtToken = _jwtProvider.GenerateToken(_mapper.Map<JwtTokenGenerateRequestDto>(user));
-        var refreshToken = _refreshTokenProvider.GenerateToken(user.Id);
-
-        _refreshTokenRepository.RemoveTokens(user.Id);
-        await _refreshTokenRepository.AddAsync(refreshToken);
+        var refreshToken = _refreshTokenGenerator.GenerateToken();
+        
+        user.AddRefreshToken(refreshToken.Token, refreshToken.ExpiresIn);
+        user.RemoveExpiredTokens();
+        
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new AuthUserDto

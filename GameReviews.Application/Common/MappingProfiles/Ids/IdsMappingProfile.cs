@@ -16,7 +16,7 @@ internal class IdsMappingProfile : Profile
     private void ApplyIdMappingsFromAssembly()
     {
         //Define the assemblies where the entities and DTOs are located
-        var baseEntityIdType = typeof(BaseEntityTypedId<>);
+        var baseEntityIdType = typeof(EntityId<>);
         var assembly = new Assembly[]
         {
             typeof(IGameReviewsApplicationMarker).Assembly,

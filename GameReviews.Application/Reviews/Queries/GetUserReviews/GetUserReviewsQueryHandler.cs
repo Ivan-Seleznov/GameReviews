@@ -4,18 +4,19 @@ using GameReviews.Application.Common;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Query;
 using GameReviews.Application.Common.Models.Dtos.Review;
-using GameReviews.Domain.Entities.Review;
 using GameReviews.Domain.Results;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using GameReviews.Application.Common.Constants;
+using GameReviews.Application.Common.Models.ReadEntities;
 
 namespace GameReviews.Application.Reviews.Queries.GetUserReviews;
 internal class GetUserReviewsQueryHandler : IQueryHandler<GetUserReviewsQuery, PagedList<ReviewDetailsDto>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IReadApplicationDbContext _context;
     private readonly IMapper _mapper;
     private readonly IUserIdStorage _userIdStorage;
-    public GetUserReviewsQueryHandler(IApplicationDbContext context, IUserIdStorage userIdStorage, IMapper mapper)
+    public GetUserReviewsQueryHandler(IReadApplicationDbContext context, IUserIdStorage userIdStorage, IMapper mapper)
     {
         _context = context;
         _userIdStorage = userIdStorage;
@@ -26,8 +27,7 @@ internal class GetUserReviewsQueryHandler : IQueryHandler<GetUserReviewsQuery, P
     {
         var userId = _userIdStorage.UserId!;
 
-        IQueryable<ReviewEntity> reviewsQuery = _context.Reviews.Where(r => r.AuthorId == userId)
-            .AsNoTracking()
+        IQueryable<ReviewReadEntity> reviewsQuery = _context.Reviews.Where(r => r.AuthorId == userId)
             .Include(r => r.Game);
 
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
@@ -38,11 +38,13 @@ internal class GetUserReviewsQueryHandler : IQueryHandler<GetUserReviewsQuery, P
         var keySelector = GetSortProperty(request.SortColumn);
         reviewsQuery = request.SortOrder?.ToLower() == "desc" ? reviewsQuery.OrderByDescending(keySelector) : reviewsQuery.OrderBy(keySelector);
 
-        var projectedQuery = reviewsQuery.ProjectTo<ReviewDetailsDto>(_mapper.ConfigurationProvider);
-        return await PagedList<ReviewDetailsDto>.CreateAsync(projectedQuery, request.Page, request.PageSize);
+        return await PagedList<ReviewDetailsDto>.CreateWithQueryAsync(
+            reviewsQuery.ProjectTo<ReviewDetailsDto>(_mapper.ConfigurationProvider),
+            request.Page ?? 1, 
+            request.PageSize ?? PagingDefaults.FilterPageSize);
     }
 
-    private static Expression<Func<ReviewEntity, object>> GetSortProperty(string? sortColumn)
+    private static Expression<Func<ReviewReadEntity, object>> GetSortProperty(string? sortColumn)
     {
         return sortColumn?.ToLower() switch
         {

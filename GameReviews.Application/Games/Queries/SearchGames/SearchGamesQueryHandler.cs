@@ -1,4 +1,5 @@
 ﻿using GameReviews.Application.Common;
+using GameReviews.Application.Common.Constants;
 using GameReviews.Application.Common.Interfaces.Query;
 using GameReviews.Application.Common.Models.Dtos.Game;
 using GameReviews.Application.Common.Models.Dtos.Image;
@@ -17,15 +18,14 @@ internal class SearchGamesQueryHandler : IQueryHandler<SearchGamesQuery, PagedLi
     public async Task<Result<PagedList<GameInfoDto>>> Handle(SearchGamesQuery request, CancellationToken cancellationToken)
     {
         var page = request.Page ?? 1;
-        var pageSize = request.PageSize ?? 10;
+        var pageSize = request.PageSize ?? PagingDefaults.SearchPageSize;
 
         if (string.IsNullOrWhiteSpace(request.SearchTerm))
         {
-            return new PagedList<GameInfoDto>(new List<GameInfoDto>(), page, pageSize,0);
+            return PagedList<GameInfoDto>.Create([], page, pageSize,0);
         }
 
         var gamesResponse = await _idgbClient.GameQueryService.SearchGame(request.SearchTerm,page,pageSize);
-
         
         var gameDtos = gamesResponse.Data.Select((game) => new GameInfoDto
         {
@@ -40,6 +40,6 @@ internal class SearchGamesQueryHandler : IQueryHandler<SearchGamesQuery, PagedLi
             } : null,
         }).ToList();
 
-        return new PagedList<GameInfoDto>(gameDtos, page, pageSize, gamesResponse.Count);
+        return PagedList<GameInfoDto>.Create(gameDtos, page, pageSize, gamesResponse.Count);
     }
 }

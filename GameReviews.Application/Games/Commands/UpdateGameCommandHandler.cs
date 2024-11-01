@@ -2,8 +2,8 @@
 using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Command;
-using GameReviews.Application.Common.Interfaces.Repositories;
 using GameReviews.Application.Common.Models.Dtos.Game;
+using GameReviews.Domain.Common.Abstractions.Repositories;
 using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Games.Commands;
@@ -27,8 +27,7 @@ internal class UpdateGameCommandHandler : ICommandHandler<UpdateGameCommand,Game
             return GameErrors.NotFound(request.GameId);
         }
 
-        game.Name = request.Name;
-        game.Description = request.Description;
+        game.Update(request.Name,request.Description);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return _mapper.Map<GameDetailsDto>(game);

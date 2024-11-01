@@ -10,8 +10,8 @@ using MediatR;
 namespace GameReviews.Web.Endpoints;
 public class ReviewsModule : CarterModule
 {
-    private const string UsersBasePath = "/reviews";
-    public ReviewsModule() : base(UsersBasePath)
+    private const string ReviewsBasePath = "/reviews";
+    public ReviewsModule() : base(ReviewsBasePath)
     {
     }
 
@@ -24,20 +24,7 @@ public class ReviewsModule : CarterModule
             })
             .RequireAuthorization(new[] { Permission.ReadUser.ToString() })
             .Produces<ReviewDetailsDto>();
-
-        app.MapGet("/", async (
-            string? searchTerm,
-            string? sortColumn,
-            string? sortOrder, 
-            int page,
-            int pageSize, 
-            ISender sender) =>
-        {
-            var query = new GetUserReviewsQuery(searchTerm, sortColumn, sortOrder, page, pageSize);
-            return (await sender.Send(query)).WithProblemDetails(x => Results.Ok(x)!);
-        })
-        .RequireAuthorization(new[] { Permission.ReadUser.ToString() })
-        .Produces<PagedList<ReviewDetailsDto>>();
+        
 
     }
 }

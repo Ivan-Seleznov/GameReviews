@@ -1,16 +1,17 @@
 ﻿using GameReviews.Application.Common.Interfaces.Command;
-using GameReviews.Application.Common.Interfaces.Repositories;
 using AutoMapper;
 using GameReviews.Application.Common.Errors;
 using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Models.Dtos.Game;
 using GameReviews.Application.Games.Queries.GetGame;
-using GameReviews.Domain.Entities.Game;
+using GameReviews.Domain.Common.Abstractions.Repositories;
+using GameReviews.Domain.Common.Abstractions.Services;
+using GameReviews.Domain.Entities.GameAggregate.Entities;
 using MediatR;
 using GameReviews.Domain.Results;
 
 namespace GameReviews.Application.Users.Commands.AddGame;
-internal class AddGameToUserCommandHandler : ICommandHandler<AddGameToUserCommand,GameDetailsDto>
+internal class AddGameToUserCommandHandler : ICommandHandler<AddGameToUserCommand,GameInfoDto>
 {
     private readonly IUsersRepository _usersRepository;
     private readonly IUserIdStorage _userIdStorage;
@@ -18,13 +19,15 @@ internal class AddGameToUserCommandHandler : ICommandHandler<AddGameToUserComman
     private readonly ISender _sender;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IGameUserRelationshipService _gameUserRelationshipService;
     public AddGameToUserCommandHandler(
         IUsersRepository usersRepository,
         IGamesRepository gamesRepository,
         IUserIdStorage userIdStorage,
         ISender sender,
         IMapper mapper,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IGameUserRelationshipService gameUserRelationshipService)
     {
         _usersRepository = usersRepository;
         _gamesRepository = gamesRepository;
@@ -33,8 +36,9 @@ internal class AddGameToUserCommandHandler : ICommandHandler<AddGameToUserComman
         _sender = sender;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _gameUserRelationshipService = gameUserRelationshipService;
     }
-    public async Task<Result<GameDetailsDto>> Handle(AddGameToUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result<GameInfoDto>> Handle(AddGameToUserCommand request, CancellationToken cancellationToken)
     {
         var userId = _userIdStorage.UserId!;
 
@@ -55,13 +59,18 @@ internal class AddGameToUserCommandHandler : ICommandHandler<AddGameToUserComman
             {
                 return gameResult.Error;
             }
-
-            game = _mapper.Map<GameEntity>(gameResult.Value);
+            
+            game = GameEntity.Create(
+                new GameId(gameResult.Value.Id),
+                gameResult.Value.Name, 
+                gameResult.Value.Description);
+            
+            await _gamesRepository.AddAsync(game);
         }
 
-        await _usersRepository.CreateOrAddGameToUser(userId,game);
-
+        await _gameUserRelationshipService.CreateRelationshipAsync(userId,game.Id);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return _mapper.Map<GameDetailsDto>(game);
+        
+        return _mapper.Map<GameInfoDto>(game);
     }
 }

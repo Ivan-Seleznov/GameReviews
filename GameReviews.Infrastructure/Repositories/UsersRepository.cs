@@ -1,21 +1,28 @@
-﻿using System.Runtime.CompilerServices;
-using GameReviews.Application.Common.Interfaces.Repositories;
-using GameReviews.Domain.Entities.Game;
-using GameReviews.Domain.Entities.User;
-using GameReviews.Domain.Entities.UserGame;
+﻿using GameReviews.Domain.Common.Abstractions.Repositories;
+using GameReviews.Domain.Entities.GameAggregate.Entities;
+using GameReviews.Domain.Entities.UserAggregate.Entities;
+using GameReviews.Domain.Entities.UserGameRelationAggregate.Entities;
 using GameReviews.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameReviews.Infrastructure.Repositories;
 
-internal sealed class UsersRepository(ApplicationDbContext context)
+internal sealed class UsersRepository(ApplicationWriteDbContext context)
     : Repository<UserEntity, UserId>(context), IUsersRepository
 {
+    public async Task AddUserGameRelationAsync(GameUserRelationship gameUserRelation)
+    {
+        await context.UsersGames.AddAsync(gameUserRelation);
+    }
+    public async Task<bool> UserHasGameAsync(UserId userId, GameId gameId)
+    {
+        return await context.UsersGames.AnyAsync(x => x.UsersId == userId && x.GamesId == gameId);
+    }
+    
     public async Task<bool> IsEmailExistsAsync(string email)
     {
         return await context.Users.AnyAsync(u => u.Email == email);
     }
-
     public async Task<bool> IsUsernameExistsAsync(string userName)
     {
         return await context.Users.AnyAsync(u => u.Username == userName);
@@ -25,35 +32,8 @@ internal sealed class UsersRepository(ApplicationDbContext context)
     {
         return await context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
-
     public async Task<UserEntity?> GetByEmailAsync(string email)
     {
         return await context.Users.FirstOrDefaultAsync(u => u.Email == email);
-    }
-
-    public async Task<bool> UserHasGameAsync(UserId userId, GameId gameId)
-    {
-        return await context.UsersGames.AnyAsync(x => x.UsersId == userId && x.GamesId == gameId);
-    }
-
-    public async Task CreateOrAddGameToUser(UserId userId, GameEntity gameEntity)
-    {
-        if (!await context.Users.AnyAsync(u => u.Id == userId))
-        {
-            throw new Exception("User with this id does not exist");
-        }
-        await context.Games.AddAsync(gameEntity);
-        await context.UsersGames.AddAsync(new GameEntityUserEntity { UsersId = userId, GamesId = gameEntity.Id });
-    }
-    public async Task AddGameToUser(UserId userId, GameId gameId)
-    {
-        await context.UsersGames.AddAsync(new GameEntityUserEntity { UsersId = userId, GamesId = gameId });
-    }
-
-    public async Task<UserEntity> GetUserOrThrow(UserId userId)
-    {
-        return await context.Users
-                   .FirstOrDefaultAsync(u => u.Id == userId)
-               ?? throw new Exception($"User with id {userId.Value} does not exist");
     }
 }

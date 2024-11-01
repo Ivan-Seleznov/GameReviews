@@ -7,5 +7,5 @@ public record GetUserReviewsQuery(
     string? SearchTerm, 
     string? SortColumn, 
     string? SortOrder,
-    int Page, 
-    int PageSize) : IQuery<PagedList<ReviewDetailsDto>>;
+    int? Page, 
+    int? PageSize) : IQuery<PagedList<ReviewDetailsDto>>;

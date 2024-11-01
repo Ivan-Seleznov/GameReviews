@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Interceptors\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Igdb.Abstractions">
       <HintPath>..\..\IgdbApi\IgdbApi\bin\Release\net8.0\Igdb.Abstractions.dll</HintPath>
     </Reference>

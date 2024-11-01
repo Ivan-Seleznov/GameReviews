@@ -4,10 +4,12 @@ using GameReviews.Application.Common.Interfaces.Authentication;
 using GameReviews.Infrastructure.Authentication;
 using GameReviews.Infrastructure.Data;
 using GameReviews.Infrastructure.Data.Extensions;
+using GameReviews.Infrastructure.Data.Interceptors;
 using Igdb.Abstractions;
 using IgdbApi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,13 +22,20 @@ public static class DependencyInjection
     {
         var assembly = typeof(IGameReviewsInfrastructureMarker).Assembly;
 
-        services.AddDbContext<ApplicationDbContext>(opt =>
+        services.AddDbContext<ApplicationWriteDbContext>((sp,opt) =>
         {
             opt.UseNpgsql(configuration.GetConnectionString("Default"));
+            opt.AddInterceptors(sp.GetRequiredService<PublishDomainEventsInterceptor>());
         });
-        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-
-        //repositories
+        services.AddDbContext<ApplicationReadDbContext>(opt =>
+        {
+            opt.UseNpgsql(configuration.GetConnectionString("Default"));
+            opt.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        });
+        
+        services.AddScoped<IReadApplicationDbContext, ApplicationReadDbContext>();
+        services.AddScoped<PublishDomainEventsInterceptor>();
+        
         services.AddRepositories();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -36,7 +45,7 @@ public static class DependencyInjection
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
-        services.AddSingleton<IRefreshTokenProvider, RefreshTokenProvider>();
+        services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
 
         var igdbSection = configuration.GetRequiredSection("Igdb");
         services.AddTransient<IIgdbClient, IgdbClient>(x 

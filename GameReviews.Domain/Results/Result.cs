@@ -18,12 +18,12 @@ public class Result
     public bool IsFailure => !IsSuccess;
 
     public Error Error { get; }
-
     public static Result Success() => new(true, Error.None);
     public static Result<T> Success<T>(T value) => new(true, Error.None, value);
 
     public static Result Failure(Error error) => new(false, error);
     public static Result<T> Failure<T>(Error error) => new(false, error, default!);
+    public static explicit operator bool(Result result) => result.IsSuccess;
 }
 
 public class Result<T> : Result

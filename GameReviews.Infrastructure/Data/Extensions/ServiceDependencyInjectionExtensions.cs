@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using GameReviews.Application;
-using GameReviews.Application.Common.Interfaces.Repositories;
+using GameReviews.Domain;
+using GameReviews.Domain.Common.Abstractions.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GameReviews.Infrastructure.Data.Extensions;
@@ -11,7 +11,7 @@ public static class ServiceDependencyInjectionExtensions
     {
         var assemblies = new Assembly[]
         {
-            typeof(IGameReviewsApplicationMarker).Assembly,
+            typeof(IGameReviewsDomainMarker).Assembly,
             typeof(IGameReviewsInfrastructureMarker).Assembly
         };
 
