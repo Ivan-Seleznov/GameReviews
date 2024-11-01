@@ -1,0 +1,1 @@
+export { GameDetailsWidget } from "./gameDetails";
