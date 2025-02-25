@@ -5,11 +5,11 @@ using GameReviews.Infrastructure.Authentication;
 using GameReviews.Infrastructure.Data;
 using GameReviews.Infrastructure.Data.Extensions;
 using GameReviews.Infrastructure.Data.Interceptors;
-using Igdb.Abstractions;
-using IgdbApi;
+using GameReviews.Infrastructure.Services;
+using GameReviews.Infrastructure.Services.IGDB;
+using IGDB;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -48,8 +48,12 @@ public static class DependencyInjection
         services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
 
         var igdbSection = configuration.GetRequiredSection("Igdb");
-        services.AddTransient<IIgdbClient, IgdbClient>(x 
-            => new IgdbClient(igdbSection.GetRequiredSection("IgdbToken").Value!, igdbSection.GetRequiredSection("IgdbClient").Value!));
+        
+        services.AddTransient<IIGDBService, IGDBServiceAdapter>(x => new IGDBServiceAdapter(
+            new IGDBClient(igdbSection.GetRequiredSection("ClientId").Value!,
+                igdbSection.GetRequiredSection("ClientSecret").Value!)));
+
+        services.AddTransient<IGameDetailsService, IGDBGameDetailsService>();
         
         return services;
     }

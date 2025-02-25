@@ -11,21 +11,23 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GameReviews.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationWriteDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    partial class ApplicationWriteDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GameReviews.Domain.Entities.Game.GameEntity", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.GameAggregate.Entities.GameEntity", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<long>("Id"), 1L, null, null, null, null, null);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -42,78 +44,7 @@ namespace GameReviews.Infrastructure.Migrations
                     b.ToTable("Games", (string)null);
                 });
 
-            modelBuilder.Entity("GameReviews.Domain.Entities.RefreshToken.RefreshTokenEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("Id"), 1L, null, null, null, null, null);
-
-                    b.Property<DateTime>("ExpiresIn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("UserId"), 1L, null, null, null, null, null);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokenEntity");
-                });
-
-            modelBuilder.Entity("GameReviews.Domain.Entities.Review.ReviewEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("Id"), 1L, null, null, null, null, null);
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("AuthorId"), 1L, null, null, null, null, null);
-
-                    b.Property<string>("Content")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long>("GameId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("Rating")
-                        .HasMaxLength(100)
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("AuthorId", "GameId")
-                        .IsUnique();
-
-                    b.ToTable("ReviewEntity", (string)null);
-                });
-
-            modelBuilder.Entity("GameReviews.Domain.Entities.Roles.PermissionEntity", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.PermissionAggregate.Entities.PermissionEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,7 +73,83 @@ namespace GameReviews.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GameReviews.Domain.Entities.Roles.Role", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.ReviewAggregate.Entities.ReviewEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("Id"), 1L, null, null, null, null, null);
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("AuthorId"), 1L, null, null, null, null, null);
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("GameId")
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<long>("GameId"), 1L, null, null, null, null, null);
+
+                    b.Property<long>("Rating")
+                        .HasMaxLength(100)
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId", "GameId")
+                        .IsUnique();
+
+                    b.ToTable("ReviewEntity", (string)null);
+                });
+
+            modelBuilder.Entity("GameReviews.Domain.Entities.RolePermissionAggregate.Entities.RolePermission", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PermissionEntityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("PermissionId");
+
+                    b.HasKey("RoleId", "PermissionEntityId");
+
+                    b.HasIndex("PermissionEntityId");
+
+                    b.ToTable("RolePermission", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionEntityId = 1
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            PermissionEntityId = 2
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            PermissionEntityId = 1
+                        });
+                });
+
+            modelBuilder.Entity("GameReviews.Domain.Entities.RolesAggregate.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -171,39 +178,35 @@ namespace GameReviews.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GameReviews.Domain.Entities.Roles.RolePermission", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserAggregate.Entities.RefreshTokenEntity", b =>
                 {
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<int>("PermissionsId")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("Id"), 1L, null, null, null, null, null);
+
+                    b.Property<DateTime>("ExpiresIn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.HasKey("RoleId", "PermissionsId");
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("UserId"), 1L, null, null, null, null, null);
 
-                    b.HasIndex("PermissionsId");
+                    b.HasKey("Id");
 
-                    b.ToTable("RolePermission");
+                    b.HasIndex("UserId");
 
-                    b.HasData(
-                        new
-                        {
-                            RoleId = 1,
-                            PermissionsId = 1
-                        },
-                        new
-                        {
-                            RoleId = 2,
-                            PermissionsId = 2
-                        },
-                        new
-                        {
-                            RoleId = 2,
-                            PermissionsId = 1
-                        });
+                    b.ToTable("RefreshTokenEntity", (string)null);
                 });
 
-            modelBuilder.Entity("GameReviews.Domain.Entities.User.UserEntity", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserAggregate.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -234,10 +237,10 @@ namespace GameReviews.Infrastructure.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("GameReviews.Domain.Entities.UserGame.GameEntityUserEntity", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserGameRelationAggregate.Entities.GameUserRelationship", b =>
                 {
                     b.Property<int>("UsersId")
                         .HasColumnType("integer");
@@ -247,6 +250,8 @@ namespace GameReviews.Infrastructure.Migrations
                     b.Property<long>("GamesId")
                         .HasColumnType("bigint");
 
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<long>("GamesId"), 1L, null, null, null, null, null);
+
                     b.HasKey("UsersId", "GamesId");
 
                     b.HasIndex("GamesId");
@@ -254,7 +259,7 @@ namespace GameReviews.Infrastructure.Migrations
                     b.ToTable("GameEntityUserEntity", (string)null);
                 });
 
-            modelBuilder.Entity("RoleUserEntity", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserRoleAggregate.Entities.UserRoleRelationshipAggregate", b =>
                 {
                     b.Property<int>("RolesId")
                         .HasColumnType("integer");
@@ -262,89 +267,70 @@ namespace GameReviews.Infrastructure.Migrations
                     b.Property<int>("UsersId")
                         .HasColumnType("integer");
 
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("UsersId"), 1L, null, null, null, null, null);
+
                     b.HasKey("RolesId", "UsersId");
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("RoleUserEntity");
+                    b.ToTable("RoleUserEntity", (string)null);
                 });
 
-            modelBuilder.Entity("GameReviews.Domain.Entities.RefreshToken.RefreshTokenEntity", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.RolePermissionAggregate.Entities.RolePermission", b =>
                 {
-                    b.HasOne("GameReviews.Domain.Entities.User.UserEntity", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GameReviews.Domain.Entities.Review.ReviewEntity", b =>
-                {
-                    b.HasOne("GameReviews.Domain.Entities.User.UserEntity", "Author")
+                    b.HasOne("GameReviews.Domain.Entities.PermissionAggregate.Entities.PermissionEntity", null)
                         .WithMany()
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("PermissionEntityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameReviews.Domain.Entities.Game.GameEntity", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Game");
-                });
-
-            modelBuilder.Entity("GameReviews.Domain.Entities.Roles.RolePermission", b =>
-                {
-                    b.HasOne("GameReviews.Domain.Entities.Roles.PermissionEntity", null)
-                        .WithMany()
-                        .HasForeignKey("PermissionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GameReviews.Domain.Entities.Roles.Role", null)
+                    b.HasOne("GameReviews.Domain.Entities.RolesAggregate.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameReviews.Domain.Entities.UserGame.GameEntityUserEntity", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserAggregate.Entities.RefreshTokenEntity", b =>
                 {
-                    b.HasOne("GameReviews.Domain.Entities.Game.GameEntity", null)
+                    b.HasOne("GameReviews.Domain.Entities.UserAggregate.Entities.UserEntity", null)
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserGameRelationAggregate.Entities.GameUserRelationship", b =>
+                {
+                    b.HasOne("GameReviews.Domain.Entities.GameAggregate.Entities.GameEntity", null)
                         .WithMany()
                         .HasForeignKey("GamesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameReviews.Domain.Entities.User.UserEntity", null)
+                    b.HasOne("GameReviews.Domain.Entities.UserAggregate.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoleUserEntity", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserRoleAggregate.Entities.UserRoleRelationshipAggregate", b =>
                 {
-                    b.HasOne("GameReviews.Domain.Entities.Roles.Role", null)
+                    b.HasOne("GameReviews.Domain.Entities.RolesAggregate.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameReviews.Domain.Entities.User.UserEntity", null)
+                    b.HasOne("GameReviews.Domain.Entities.UserAggregate.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameReviews.Domain.Entities.User.UserEntity", b =>
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserAggregate.Entities.UserEntity", b =>
                 {
                     b.Navigation("RefreshTokens");
                 });

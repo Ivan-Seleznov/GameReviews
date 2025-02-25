@@ -66,10 +66,15 @@ internal class AddGameToUserCommandHandler : ICommandHandler<AddGameToUserComman
                 gameResult.Value.Description);
             
             await _gamesRepository.AddAsync(game);
+            
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        await _gameUserRelationshipService.CreateRelationshipAsync(userId,game.Id);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var relationshipCreationResult = await _gameUserRelationshipService.CreateRelationshipAsync(userId,game.Id);
+        if (relationshipCreationResult.IsFailure)
+        {
+            return relationshipCreationResult.Error;
+        }
         
         return _mapper.Map<GameInfoDto>(game);
     }

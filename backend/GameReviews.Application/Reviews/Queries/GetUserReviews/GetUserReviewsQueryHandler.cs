@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using GameReviews.Application.Common.Constants;
 using GameReviews.Application.Common.Models.ReadEntities;
+using GameReviews.Application.Common.PagedList;
 
 namespace GameReviews.Application.Reviews.Queries.GetUserReviews;
 internal class GetUserReviewsQueryHandler : IQueryHandler<GetUserReviewsQuery, PagedList<ReviewDetailsDto>>

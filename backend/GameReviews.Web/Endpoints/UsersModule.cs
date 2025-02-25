@@ -3,6 +3,7 @@ using GameReviews.Application.Common;
 using GameReviews.Application.Common.Models.Dtos.Game;
 using GameReviews.Application.Common.Models.Dtos.Review;
 using GameReviews.Application.Common.Models.Dtos.User;
+using GameReviews.Application.Common.PagedList;
 using GameReviews.Application.Games.Queries.GetGames;
 using GameReviews.Application.Games.Queries.GetUserGames;
 using GameReviews.Application.Reviews.Queries.GetUserReviews;
