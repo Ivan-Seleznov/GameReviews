@@ -1,19 +1,18 @@
 ﻿using GameReviews.Application.Common;
 using GameReviews.Application.Common.Constants;
+using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Query;
 using GameReviews.Application.Common.Models.Dtos.Game;
-using GameReviews.Application.Common.Models.Dtos.Image;
+using GameReviews.Application.Common.PagedList;
 using GameReviews.Domain.Results;
-using Igdb.Abstractions;
-using Igdb.Abstractions.Extensions.Images;
 
 namespace GameReviews.Application.Games.Queries.SearchGames;
 internal class SearchGamesQueryHandler : IQueryHandler<SearchGamesQuery, PagedList<GameInfoDto>>
 {
-    private readonly IIgdbClient _idgbClient;
-    public SearchGamesQueryHandler(IIgdbClient idgbClient)
+    private readonly IGameDetailsService _gameDetailsService;
+    public SearchGamesQueryHandler(IGameDetailsService gameDetailsService)
     {
-        _idgbClient = idgbClient;
+        _gameDetailsService = gameDetailsService;
     }
     public async Task<Result<PagedList<GameInfoDto>>> Handle(SearchGamesQuery request, CancellationToken cancellationToken)
     {
@@ -24,22 +23,7 @@ internal class SearchGamesQueryHandler : IQueryHandler<SearchGamesQuery, PagedLi
         {
             return PagedList<GameInfoDto>.Create([], page, pageSize,0);
         }
-
-        var gamesResponse = await _idgbClient.GameQueryService.SearchGame(request.SearchTerm,page,pageSize);
         
-        var gameDtos = gamesResponse.Data.Select((game) => new GameInfoDto
-        {
-            Id = game!.Id,
-            Name = game.Name,
-            Description = game.Summary,
-            Cover = game.Cover != null ? new ImageDto
-            {
-                Width = game.Cover.Value.Width,
-                Height = game.Cover.Value.Height,
-                Url = game.Cover.Value.GetUrlWithPixelCount(720)
-            } : null,
-        }).ToList();
-
-        return PagedList<GameInfoDto>.Create(gameDtos, page, pageSize, gamesResponse.Count);
+        return await _gameDetailsService.SearchGameAsync(request.SearchTerm, page, pageSize);
     }
 }

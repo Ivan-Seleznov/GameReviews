@@ -6,6 +6,7 @@ using MediatR;
 using GameReviews.Application.Common;
 using GameReviews.Application.Common.Models.Dtos.Jwt;
 using GameReviews.Application.Common.Interfaces.Authentication;
+using GameReviews.Application.Users.Commands.CreateUserEntity;
 using GameReviews.Domain.Common.Abstractions.Repositories;
 using GameReviews.Domain.Common.Abstractions.Services;
 using GameReviews.Domain.Entities.RolesAggregate.Entities;
@@ -47,26 +48,16 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
     public async Task<Result<AuthUserDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var userResult = await UserEntity.CreateAsync(
-            request.Username, 
-            request.Email, 
-            _passwordHasher.Hash(request.Password),
-            _usersRepository);
+        var userCreationResult = await _sender.Send(
+            new CreateUserEntityCommand(request.Username, request.Email, request.Password, Role.Registered.Name), 
+            cancellationToken);
         
-        if (userResult.IsFailure)
+        if (userCreationResult.IsFailure)
         {
-            return userResult.Error;
+            return userCreationResult.Error;
         }
-        
-        var user = userResult.Value;
-        await _usersRepository.AddAsync(user);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-        
-        var assignmentResult  = await _roleAssignmentService.AssignRoleToUserAsync(user.Id, Role.Registered.Name);
-        if (assignmentResult.IsFailure)
-        {
-            return assignmentResult.Error;
-        }
+
+        var user = userCreationResult.Value;
         
         var jwtToken = _jwtProvider.GenerateToken(new JwtTokenGenerateRequestDto
         {
@@ -76,8 +67,6 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
         var refreshToken = _refreshTokenGenerator.GenerateToken();
         user.AddRefreshToken(refreshToken.Token, refreshToken.ExpiresIn);
         
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-
         return new AuthUserDto
         {
             User = _mapper.Map<UserDetailsDto>(user),

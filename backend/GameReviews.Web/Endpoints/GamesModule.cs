@@ -1,6 +1,8 @@
 ﻿using Carter;
 using GameReviews.Application.Common;
 using GameReviews.Application.Common.Models.Dtos.Game;
+using GameReviews.Application.Common.Models.GameDetails;
+using GameReviews.Application.Common.PagedList;
 using GameReviews.Application.Games.Commands;
 using GameReviews.Application.Games.Queries.GetGame;
 using GameReviews.Application.Games.Queries.GetGames;
@@ -10,7 +12,6 @@ using GameReviews.Domain.Common.Authorization;
 using GameReviews.Domain.Entities.GameAggregate.Entities;
 using GameReviews.Web.Extensions;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GameReviews.Web.Endpoints;
 
@@ -31,7 +32,7 @@ public class GamesModule : CarterModule
         });
 
         app.MapGet("", async (
-                [AsParameters] GameFilterParams filter,
+                [AsParameters] GameFilter filter,
                 string? sortColumn,
                 string? sortOrder,
                 int? page,
@@ -55,7 +56,8 @@ public class GamesModule : CarterModule
                 return (await sender.Send(addGameToUserCommand))
                     .OkOrProblemDetails();
             })
-            .Produces<GameInfoDto>();
+            .Produces<GameInfoDto>()
+            .RequireAuthorization(Permission.ReadUser.ToString());
 
         app.MapPut("/", async (UpdateGameCommand command, ISender sender) =>
             {

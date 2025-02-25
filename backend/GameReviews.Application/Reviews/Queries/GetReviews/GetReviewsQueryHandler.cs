@@ -6,6 +6,7 @@ using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Interfaces.Query;
 using GameReviews.Application.Common.Models.Dtos.Review;
 using GameReviews.Application.Common.Models.ReadEntities;
+using GameReviews.Application.Common.PagedList;
 using GameReviews.Domain.Results;
 using Microsoft.EntityFrameworkCore;
 

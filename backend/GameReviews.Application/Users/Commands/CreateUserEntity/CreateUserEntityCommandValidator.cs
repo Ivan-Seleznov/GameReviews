@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using GameReviews.Domain.Common.Abstractions.Repositories;
 
-namespace GameReviews.Application.Users.Commands.CreateUser;
+namespace GameReviews.Application.Users.Commands.CreateUserEntity;
 
-public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+internal sealed class CreateUserEntityCommandValidator : AbstractValidator<CreateUserEntityCommand>
 {
-    public CreateUserCommandValidator(IUsersRepository usersRepository)
+    public CreateUserEntityCommandValidator(IUsersRepository usersRepository)
     {
         RuleFor(u => u.Email)
             .NotEmpty().WithMessage("Email is required")
