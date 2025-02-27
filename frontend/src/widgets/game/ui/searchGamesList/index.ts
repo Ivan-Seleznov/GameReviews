@@ -1,1 +1,0 @@
-export { SearchGamesListWidget } from "./searchGamesList";

@@ -1,20 +1,19 @@
-import { CardsList } from "@/shared/ui/cardsList";
-import { ProductCard } from "@/shared/ui/productCard";
-import { FC } from "react";
-import { GameListProps } from "./props";
+import { GameListProps } from "./GamesList.props";
 import { GameDetailsDto } from "@/shared/api";
 import { useNavigate } from "react-router-dom";
+import { CardsList, ProductCard } from "@/shared/ui";
 
-export const GamesList: FC<GameListProps> = ({ games }) => {
+export const GamesList = ({ games, type = "flex" }: GameListProps) => {
   const navigate = useNavigate();
   const onGameClicked = (game: GameDetailsDto) => {
     navigate(`/game/?id=${game.id}`);
   };
 
   return (
-    <CardsList type="flex">
+    <CardsList type={type}>
       {games.map((value) => (
         <ProductCard
+          type={type}
           title={value.name}
           description={value.description}
           imageUrl={value.cover?.url}

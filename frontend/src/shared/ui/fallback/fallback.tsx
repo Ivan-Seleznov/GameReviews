@@ -1,9 +1,9 @@
 import { FallbackWrapper } from "./fallback.styled";
 
-export function Fallback() {
+export const Fallback = () => {
   return (
     <FallbackWrapper>
       <h1>Error</h1>
     </FallbackWrapper>
   );
-}
+};

@@ -1,28 +1,27 @@
-import { FC } from "react";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
-import { LogoLinkStyled, LogoStyled, LogoTitleStyled } from "./logo.styled";
+import { LogoLink, LogoWrapper, LogoTitle } from "./logo.styled";
 
-interface ILogoProps {
+interface LogoProps {
   link?: string;
   className?: string;
 }
 
-export const Logo: FC<ILogoProps> = ({ link, className = "" }) => {
+export const Logo = ({ link, className = "" }: LogoProps) => {
   const logoContent = (
     <>
       <SportsEsportsIcon fontSize="large" />
-      <LogoTitleStyled></LogoTitleStyled>
+      <LogoTitle></LogoTitle>
       <h2 className="logo-title">GameReviews</h2>
     </>
   );
 
   if (link) {
     return (
-      <LogoStyled className={className}>
-        <LogoLinkStyled href={link}>{logoContent}</LogoLinkStyled>
-      </LogoStyled>
+      <LogoWrapper className={className}>
+        <LogoLink href={link}>{logoContent}</LogoLink>
+      </LogoWrapper>
     );
   }
 
-  return <LogoStyled className={className}>{logoContent}</LogoStyled>;
+  return <LogoWrapper className={className}>{logoContent}</LogoWrapper>;
 };

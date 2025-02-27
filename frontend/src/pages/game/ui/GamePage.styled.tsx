@@ -1,5 +1,13 @@
 import styled from "styled-components";
-export const GameInfoWrapper = styled.div`
+
+export const GamePageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0px 50px;
+  gap: 20px;
+`;
+
+export const GameContentWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
@@ -7,23 +15,23 @@ export const GameInfoWrapper = styled.div`
   width: 100%;
 `;
 
-export const GameInfoContent = styled.div`
+export const GameContent = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
   gap: 20px;
 `;
-export const GamePlatforms = styled.div`
+export const PlatformsContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 20px;
 `;
-export const GamePlatform = styled.img`
+export const PlatformImage = styled.img`
   display: block;
   height: 20px;
 `;
-export const GameInfoImageContainer = styled.div`
+export const GameImagesContainer = styled.div`
   display: flex;
 
   img {
@@ -32,7 +40,7 @@ export const GameInfoImageContainer = styled.div`
     border-radius: 4px;
   }
 `;
-export const GameInfoTextContainer = styled.div`
+export const InformationSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;

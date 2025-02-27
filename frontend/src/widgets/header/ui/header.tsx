@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
-import { ThemeSwitcher } from "@/features/theme/themeSwitcher";
-import { Logo } from "@/shared/ui/logo/logo";
+import { ThemeSwitcher } from "@/features/theme";
+import { Logo } from "@/shared/ui/logo/Logo";
 import { GamesSearch } from "@/features/game";
 
 import {
@@ -11,7 +11,7 @@ import {
   NavMenu,
   NavMenuItem,
   NavMenuList,
-} from "./header.styled";
+} from "./Header.styled";
 
 export const Header = () => {
   return (

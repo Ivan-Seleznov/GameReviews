@@ -1,6 +1,6 @@
-import { CardsListWrapper } from "./cardsList.styled";
-import { CardsListProps } from "./props";
+import { CardsListWrapper } from "./CardsList.styled";
+import { CardsListProps } from "./CardsList.props";
 
-export const CardsList: React.FC<CardsListProps> = ({ children, type }) => {
+export const CardsList = ({ children, type }: CardsListProps) => {
   return <CardsListWrapper type={type}>{children}</CardsListWrapper>;
 };

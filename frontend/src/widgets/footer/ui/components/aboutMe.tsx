@@ -4,7 +4,7 @@ import {
   FooterLinkStyled,
   FooterListItemStyled,
   FooterListStyled,
-} from "../footer.styled";
+} from "../Footer.styled";
 
 export const AboutMe = () => {
   return (

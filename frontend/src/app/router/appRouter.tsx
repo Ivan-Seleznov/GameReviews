@@ -1,13 +1,10 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "../layout";
-import { Fallback } from "../../shared/ui/fallback";
-import { useTheme } from "../../entities/theme/lib/useTheme";
-import { SearchGamesPage } from "@/pages/game/ui/searchGamesPage/searchGamesPage";
-import { GamePage } from "@/pages/game/ui/gamePage/gamePage";
+import { Fallback } from "@/shared/ui";
+import { GamesPage } from "@/pages/games/ui/GamesPage";
+import { GamePage } from "@/pages/game";
+import { SearchGamesPage } from "@/pages/search";
+import { useTheme } from "styled-components";
 
 const router = createBrowserRouter([
   {
@@ -16,11 +13,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Navigate to="/games" />,
+        element: <h1>Main Page</h1>,
       },
       {
         path: "/games",
-        element: <h1>Games Page</h1>,
+        element: <GamesPage />,
       },
       {
         path: "/game",

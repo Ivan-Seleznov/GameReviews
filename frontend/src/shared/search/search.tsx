@@ -4,9 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { AutocompleteInputChangeReason } from "@mui/material";
-import httpClient from "@/shared/lib/httpClient";
+import httpClient from "@/shared/api/httpClient";
 import { FetchGamesProps, SearchProps } from "./props";
-import { PagedList } from "@/shared/api";
+import { PagedList } from "@/shared/api/";
 
 const defaultDebounceTimeout = 200;
 

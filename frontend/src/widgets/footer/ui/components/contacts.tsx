@@ -4,7 +4,7 @@ import {
   FooterListStyled,
   FooterListItemStyled,
   FooterLinkStyled,
-} from "../footer.styled";
+} from "../Footer.styled";
 
 export const Contacts = () => {
   return (

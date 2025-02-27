@@ -1,22 +1,22 @@
 import { CardActionArea, Typography } from "@mui/material";
-import { FC } from "react";
-import { ProductCardProps } from "./props";
+import { ProductCardProps } from "./ProductCard.props";
 import {
   StyledCard,
   StyledCardMedia,
   StyledCardContent,
-} from "./productCard.styled";
+} from "./ProductCard.styled";
 
-export const ProductCard: FC<ProductCardProps> = ({
+export const ProductCard = ({
+  type = "flex",
   title,
   imageUrl,
   description,
   onClick,
-}) => {
+}: ProductCardProps) => {
   return (
     <CardActionArea onClick={onClick ?? undefined}>
-      <StyledCard>
-        {imageUrl && <StyledCardMedia image={imageUrl} />}
+      <StyledCard type={type}>
+        {imageUrl && <StyledCardMedia image={imageUrl} type={type} />}
 
         <StyledCardContent sx={{ width: "inherit" }}>
           <Typography gutterBottom variant="h5">

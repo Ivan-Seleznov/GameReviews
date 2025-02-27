@@ -4,23 +4,49 @@ import {
   CardContent,
   styled as styledMui,
 } from "@mui/material";
+import { ProductCardStyleProps } from "./ProductCard.props";
 
-export const StyledCard = styledMui(Card)(({ theme }) => ({
-  width: "100%",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "flex-start",
-  position: "relative",
-}));
+const sizeVariants = {
+  flex: {
+    imageHeight: "110px",
+    imageWidth: "100px",
+    cardHeight: "fit-content",
+  },
+  grid: {
+    imageHeight: "110px",
+    imageWidth: "150px",
+    cardHeight: "136px",
+  },
+};
 
-export const StyledCardMedia = styledMui(CardMedia)({
-  height: "110px",
-  width: "100px",
-  borderRadius: "4px",
-  marginLeft: "16px",
-  marginTop: "16px",
-  marginBottom: "16px",
+export const StyledCard = styledMui(Card)<ProductCardStyleProps>(({ type }) => {
+  const sizeVariant = sizeVariants[type];
+
+  return {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    position: "relative",
+    height: sizeVariant.cardHeight,
+  };
 });
+
+export const StyledCardMedia = styledMui(CardMedia)<ProductCardStyleProps>(
+  ({ type }) => {
+    const sizeVariant = sizeVariants[type];
+
+    return {
+      height: sizeVariant.imageHeight,
+      width: sizeVariant.imageWidth,
+      borderRadius: "4px",
+      marginLeft: "16px",
+      marginTop: "16px",
+      marginBottom: "16px",
+    };
+  }
+);
+
 export const StyledCardContent = styledMui(CardContent)({
   display: "flex",
   flexDirection: "column",
