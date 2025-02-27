@@ -2,7 +2,7 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import { Header } from "../../widgets/header";
 import { Footer } from "../../widgets/footer";
-import { LayoutContent, LayoutWrapper } from "./layout.styled";
+import { LayoutContent, LayoutWrapper } from "./Layout.styled";
 
 export const Layout = () => {
   return (

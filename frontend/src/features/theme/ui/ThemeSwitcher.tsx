@@ -1,7 +1,7 @@
 import { useTheme } from "@/entities/theme/lib/useTheme";
 
 import { Theme } from "@/entities/theme/config/themeContext";
-import { ThemeSwitcherStyled } from "./themeSwitcher.styled";
+import { ThemeSwitcherStyled } from "./ThemeSwitcher.styled";
 
 export const ThemeSwitcher = () => {
   const { theme, toggleTheme } = useTheme();
