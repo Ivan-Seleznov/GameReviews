@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const FooterStyled = styled.div`
   width: 100%;
-  background-color: #f0f0f0;
+  background-color: ${({ theme }) => theme.body};
+  color: ${({ theme }) => theme.text};
 `;
 export const FooterContentStyled = styled.div`
   display: flex;

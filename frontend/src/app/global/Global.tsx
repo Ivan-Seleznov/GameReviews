@@ -23,4 +23,8 @@ export const GlobalStyles = createGlobalStyle`
     a:active {
         opacity: 0.8; 
     }
+    
+    body{
+        height: 100vh;
+    }
 `;

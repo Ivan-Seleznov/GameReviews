@@ -5,12 +5,12 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { AutocompleteInputChangeReason } from "@mui/material";
 import httpClient from "@/shared/api/httpClient";
-import { FetchGamesProps, SearchProps } from "./props";
+import { FetchGamesProps, SearchProps } from "./Search.props";
 import { PagedList } from "@/shared/api/";
 
 const defaultDebounceTimeout = 200;
 
-const fetchGames = async <T,>({
+const fetchEntities = async <T,>({
   searchValue,
   apiUrl,
   queryParam = "searchTerm",
@@ -46,7 +46,7 @@ export const Search = <T,>({
   const { data, isFetching } = useQuery<PagedList<T>>({
     queryKey: [queryKey, debouncedSearchValue],
     queryFn: ({ signal }) =>
-      fetchGames<T>({
+      fetchEntities<T>({
         searchValue: debouncedSearchValue,
         apiUrl,
         queryParam,

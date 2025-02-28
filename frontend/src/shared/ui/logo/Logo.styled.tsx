@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { LogoLinkStyleProps } from "./logo.props";
+import { LogoLinkStyleProps } from "./Logo.props";
 
 export const LogoWrapper = styled.div`
   display: flex;

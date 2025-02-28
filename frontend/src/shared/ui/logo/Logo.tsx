@@ -1,5 +1,5 @@
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
-import { LogoLink, LogoWrapper, LogoTitle } from "./logo.styled";
+import { LogoLink, LogoWrapper, LogoTitle } from "./Logo.styled";
 
 interface LogoProps {
   link?: string;
