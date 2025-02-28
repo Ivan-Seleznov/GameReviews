@@ -1,19 +1,26 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "../layout";
-import { Fallback } from "@/shared/ui";
-import { GamesPage } from "@/pages/games/ui/GamesPage";
+//import { GamesPage } from "@/pages/games/ui/GamesPage";
 import { GamePage } from "@/pages/game";
 import { SearchGamesPage } from "@/pages/search";
 import { useTheme } from "styled-components";
+import { ErrorPage } from "@/pages/error";
+import { lazy } from "react";
+
+const GamesPage = lazy(() =>
+  import("@/pages/games").then((mod) => ({
+    default: mod.GamesPage,
+  }))
+);
 
 const router = createBrowserRouter([
   {
     element: <Layout />,
-    errorElement: <Fallback />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
-        element: <h1>Main Page</h1>,
+        element: <h1>Home page</h1>,
       },
       {
         path: "/games",
@@ -29,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: "search/games/",
-        element: <SearchGamesPage></SearchGamesPage>,
+        element: <SearchGamesPage />,
       },
     ],
   },
