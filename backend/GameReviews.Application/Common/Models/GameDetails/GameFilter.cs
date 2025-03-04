@@ -1,8 +1,8 @@
 ﻿namespace GameReviews.Application.Common.Models.GameDetails;
 
 public record GameFilter(
-    string? Type,
-    string? Status,
+    string? Category,
     DateTime? EndYear,
     DateTime? StartYear,
-    long[]? PlatformIds);
+    string[]? Platforms,
+    string[]? Genres);

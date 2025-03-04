@@ -18,5 +18,6 @@ export const useGameQuery = (gameId: number | null) => {
     queryFn: async ({ signal }) => await fetchGame(gameId!, signal),
     enabled: gameId != null,
     staleTime: GAME_SLATE_TIME, //3 minutes
+    refetchOnWindowFocus: false,
   });
 };

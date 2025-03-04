@@ -27,3 +27,33 @@ interface ImageDto {
   width?: number;
   height?: number;
 }
+interface EntityFilter {
+  page?: number;
+  pageSize?: number;
+  sortColumn?: string;
+  sortOrder?: string;
+}
+export interface GamesFilter extends EntityFilter {
+  category?: string;
+  startYear?: string;
+  endYear?: string;
+  genres?: string[];
+  platforms?: string[];
+}
+
+export interface GamesFilter extends EntityFilter {
+  Type?: string;
+  Status?: string;
+  StartYear?: string;
+  EndYear?: string;
+}
+export interface GenreDto {
+  id: number;
+  name: string;
+}
+export interface PlatformDto {
+  id: number;
+  name: string;
+  description: string;
+  ImageDto?: ImageDto;
+}
