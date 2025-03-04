@@ -21,10 +21,10 @@ internal class GetGamesQueryHandler : IQueryHandler<GetGamesQuery, PagedList<Gam
         var page = request.Page ?? 1;
         var pageSize = request.PageSize ?? PagingDefaults.FilterPageSize;
         
-         return await _gameDetailsService.GetAllGamesAsync(
+         return await _gameDetailsService.GetGamesAsync(
              request.Filter,
              request.SortColumn ?? "name",
-             request.SortOrder,
+             request.SortOrder ?? "asc",
              page,
              pageSize);
     }

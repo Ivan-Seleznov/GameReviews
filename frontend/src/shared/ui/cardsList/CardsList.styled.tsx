@@ -15,6 +15,6 @@ export const CardsListWrapper = styled.div<CardListWrapperProps>`
     justify-content:flex-start;
     gap: 20px;
     justify-content: center;`}
-
+  height: fit-content;
   width: 100%;
 `;

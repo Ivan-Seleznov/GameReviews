@@ -4,6 +4,7 @@ import {
   StyledCard,
   StyledCardMedia,
   StyledCardContent,
+  ProductCardContainer,
 } from "./ProductCard.styled";
 
 export const ProductCard = ({
@@ -14,25 +15,27 @@ export const ProductCard = ({
   onClick,
 }: ProductCardProps) => {
   return (
-    <CardActionArea onClick={onClick ?? undefined}>
-      <StyledCard type={type}>
-        {imageUrl && <StyledCardMedia image={imageUrl} type={type} />}
+    <ProductCardContainer>
+      <CardActionArea onClick={onClick ?? undefined}>
+        <StyledCard type={type}>
+          {imageUrl && <StyledCardMedia image={imageUrl} type={type} />}
 
-        <StyledCardContent sx={{ width: "inherit" }}>
-          <Typography gutterBottom variant="h5">
-            {title}
-          </Typography>
-
-          {description && (
-            <Typography
-              variant="body2"
-              sx={{ color: "text.secondary", maxHeight: "100%" }}
-            >
-              {description}
+          <StyledCardContent sx={{ width: "inherit" }}>
+            <Typography gutterBottom variant="h5">
+              {title}
             </Typography>
-          )}
-        </StyledCardContent>
-      </StyledCard>
-    </CardActionArea>
+
+            {description && (
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary", maxHeight: "100%" }}
+              >
+                {description}
+              </Typography>
+            )}
+          </StyledCardContent>
+        </StyledCard>
+      </CardActionArea>
+    </ProductCardContainer>
   );
 };

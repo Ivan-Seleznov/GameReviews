@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "../layout";
 //import { GamesPage } from "@/pages/games/ui/GamesPage";
-import { GamePage } from "@/pages/game";
-import { SearchGamesPage } from "@/pages/search";
+//import { GamePage } from "@/pages/game";
+//import { SearchGamesPage } from "@/pages/search";
 import { useTheme } from "styled-components";
 import { ErrorPage } from "@/pages/error";
 import { lazy } from "react";
@@ -10,6 +10,18 @@ import { lazy } from "react";
 const GamesPage = lazy(() =>
   import("@/pages/games").then((mod) => ({
     default: mod.GamesPage,
+  }))
+);
+
+const SearchGamesPage = lazy(() =>
+  import("@/pages/search").then((mod) => ({
+    default: mod.SearchGamesPage,
+  }))
+);
+
+const GamePage = lazy(() =>
+  import("@/pages/game").then((mod) => ({
+    default: mod.GamePage,
   }))
 );
 

@@ -17,14 +17,9 @@ public class ReviewsModule : CarterModule
 
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/", async (CreateReviewCommand command, ISender sender) =>
-            {
-                return (await sender.Send(command))
-                    .WithProblemDetails(x => Results.Ok(x)!);
-            })
+        app.MapPost("/", async (CreateReviewCommand command, ISender sender) => 
+                (await sender.Send(command)).OkOrProblemDetails())
             .RequireAuthorization(new[] { Permission.ReadUser.ToString() })
             .Produces<ReviewDetailsDto>();
-        
-
     }
 }

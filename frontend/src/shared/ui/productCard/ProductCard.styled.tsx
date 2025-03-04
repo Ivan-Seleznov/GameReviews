@@ -5,6 +5,7 @@ import {
   styled as styledMui,
 } from "@mui/material";
 import { ProductCardStyleProps } from "./ProductCard.props";
+import styled from "styled-components";
 
 const sizeVariants = {
   flex: {
@@ -18,6 +19,7 @@ const sizeVariants = {
     cardHeight: "136px",
   },
 };
+export const ProductCardContainer = styled.div({});
 
 export const StyledCard = styledMui(Card)<ProductCardStyleProps>(({ type }) => {
   const sizeVariant = sizeVariants[type];

@@ -22,5 +22,6 @@ export const useSearchGamesQuery = (gameName: string | null, page?: number) => {
     queryFn: async ({ signal }) => await fetchGames(gameName!, page!, signal),
     enabled: !!gameName?.trim() && !!page,
     staleTime: SEARCH_GAME_SLATE_TIME,
+    refetchOnWindowFocus: false,
   });
 };
