@@ -12,3 +12,7 @@ Website where users can leave reviews for video games and add them to their pers
 ### Frontend
 - React
 - MUI
+
+## Screenshots
+![Games Page](https://github.com/user-attachments/assets/888ae01d-d377-416b-97a8-cb51c12d0938)
+![Search Game Page](https://github.com/user-attachments/assets/667c473b-1eeb-4a9f-b539-24f72c613683)
