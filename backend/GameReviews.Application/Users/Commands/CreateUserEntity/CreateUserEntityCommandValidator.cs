@@ -18,10 +18,14 @@ internal sealed class CreateUserEntityCommandValidator : AbstractValidator<Creat
                 }).WithMessage("User with this email has already exist");
             });
 
-        RuleFor(u => u.Username).MustAsync(async (username, token) =>
-        {
-            return !await usersRepository.IsUsernameExistsAsync(username);
-        }).WithMessage("User with this username has already exist");
+        RuleFor(u => u.Username)
+            .NotEmpty().WithMessage("Username is required")
+            .MinimumLength(5)
+            .MaximumLength(12)
+            .MustAsync(async (username, token) =>
+            {
+                return !await usersRepository.IsUsernameExistsAsync(username);
+            }).WithMessage("User with this username has already exist");
 
         RuleFor(u => u.Password)
             .NotEmpty().WithMessage("Password is required.")

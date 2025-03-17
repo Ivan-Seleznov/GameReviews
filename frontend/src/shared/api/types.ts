@@ -57,3 +57,39 @@ export interface PlatformDto {
   description: string;
   ImageDto?: ImageDto;
 }
+export interface UserDetailsDto {
+  id: number;
+  username: string;
+  email: string;
+}
+export interface AuthUserDto {
+  user: UserDetailsDto;
+  accessToken: string;
+  refreshToken: string;
+}
+export interface LoginUserCommand {
+  username: string;
+  password: string;
+}
+export interface RegisterUserCommand {
+  username: string;
+  email: string;
+  password: string;
+}
+export type ValidationErrors = {
+  type: string;
+  title: string;
+  status: number;
+  errors: Record<string, string[]>;
+};
+export type ApiError = {
+  type: string;
+  title: string;
+  status: number;
+  error: {
+    code: string;
+    message: string;
+  };
+};
+
+//TODO: Add auto-generated types

@@ -1,4 +1,6 @@
-﻿namespace GameReviews.Domain.Results.Errors;
+﻿using System.Text.Json.Serialization;
+
+namespace GameReviews.Domain.Results.Errors;
 public record Error
 {
     public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
@@ -13,6 +15,7 @@ public record Error
 
     public string Code { get; }
     public string Message { get; }
+    [JsonIgnore]
     public ErrorType ErrorType { get; }
 
     public static implicit operator Result(Error error) => Result.Failure(error);

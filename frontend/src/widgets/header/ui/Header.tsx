@@ -12,6 +12,7 @@ import {
   NavMenuItem,
   NavMenuList,
 } from "./Header.styled";
+import { AuthButtons } from "./AuthButtons";
 
 export const Header = () => {
   return (
@@ -62,7 +63,7 @@ export const Header = () => {
         </NavMenu>
         <HeaderRight>
           <GamesSearch />
-          <a>Account</a>
+          <AuthButtons />
           <ThemeSwitcher />
         </HeaderRight>
       </HeaderWrapper>
