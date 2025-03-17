@@ -23,11 +23,11 @@ public static class ApiResults
             {
                 ValidationError validationError => new Dictionary<string, object?>
                 {
-                    { "errors",new[]{ validationError.Errors} }
+                    { "errors", validationError.Errors }
                 },
                 _ => new Dictionary<string, object?>()
                 {
-                    { "errors", new[] {error} }
+                    { "error", error }
                 }
             };
         }

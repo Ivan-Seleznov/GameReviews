@@ -1,5 +1,5 @@
 export { configureHttpClient } from "./httpClient";
-
+export { isValidationError, isApiError } from "./errorUtils";
 export type {
   GameDetailsDto,
   GameInfoDto,
@@ -7,4 +7,10 @@ export type {
   GamesFilter,
   GenreDto,
   PlatformDto,
+  UserDetailsDto,
+  AuthUserDto,
+  LoginUserCommand,
+  RegisterUserCommand,
+  ValidationErrors,
+  ApiError,
 } from "./types";

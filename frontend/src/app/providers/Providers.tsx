@@ -1,8 +1,8 @@
-import { ErrorBoundary } from "react-error-boundary";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Fallback } from "@/shared/ui";
 import { ThemeProvider } from "@/entities/theme/ui/ThemeProvider";
 import { GlobalStyles } from "../global/Global";
+import { AuthProvider } from "@/entities/auth/lib/AuthProvider";
+import { AuthModalProvider } from "@/features/auth/lib/AuthModalProvider";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +14,11 @@ export const Providers = ({ children }: Providers) => {
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalStyles />
-      <ThemeProvider>{children}</ThemeProvider>
+      <AuthProvider>
+        <AuthModalProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </AuthModalProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
