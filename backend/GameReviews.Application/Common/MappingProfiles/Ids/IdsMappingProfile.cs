@@ -9,7 +9,7 @@ internal class IdsMappingProfile : Profile
     private const string EntityIdPropertyName = "Value";
     public IdsMappingProfile()
     {
-        //GOVNO. This setup is performed when the profile is first used
+        //This setup is performed when the profile is first used
         ApplyIdMappingsFromAssembly();
     }
 
