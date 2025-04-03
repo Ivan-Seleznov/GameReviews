@@ -10,5 +10,6 @@ public interface IUsersRepository : IRepository<UserEntity, UserId>
     Task<bool> IsUsernameExistsAsync(string username);
     Task<UserEntity?> GetByUsernameAsync(string username);
     Task<UserEntity?> GetByEmailAsync(string email);
+    Task<UserEntity?> GetWithRefreshTokens(UserId id);
     Task<bool> UserHasGameAsync(UserId userId, GameId requestGameId);
 }

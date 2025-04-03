@@ -34,7 +34,7 @@ internal sealed class RefreshTokenHandler : ICommandHandler<RefreshUserTokenComm
     public async Task<Result<AuthUserDto>> Handle(RefreshUserTokenCommand request, CancellationToken cancellationToken)
     {
         var userId = _jwtProvider.GetUserIdFromToken(request.AccessToken);
-        var user = await _usersRepository.GetByIdAsync(userId);
+        var user = await _usersRepository.GetWithRefreshTokens(userId);
 
         if (user is null)
         {
@@ -43,9 +43,9 @@ internal sealed class RefreshTokenHandler : ICommandHandler<RefreshUserTokenComm
 
         var newRefreshToken = _refreshTokenGenerator.GenerateToken();
         var updateTokenResult = user.UpdateRefreshToken(request.RefreshToken, newRefreshToken.Token, newRefreshToken.ExpiresIn);
-        if (!updateTokenResult.IsFailure)
+        if (updateTokenResult.IsFailure)
         {
-            return AuthErrors.Authentication();
+            return updateTokenResult.Error;
         }
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);

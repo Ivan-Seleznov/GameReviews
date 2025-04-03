@@ -1,5 +1,6 @@
 ﻿using Carter;
 using GameReviews.Application.Common;
+using GameReviews.Application.Common.Interfaces;
 using GameReviews.Application.Common.Models.Dtos.Game;
 using GameReviews.Application.Common.Models.Dtos.Review;
 using GameReviews.Application.Common.Models.Dtos.User;
@@ -24,19 +25,22 @@ public class UsersModule : CarterModule
 
     public UsersModule() : base(UsersBasePath)
     {
+        
     }
 
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/{id}", async (int id, ISender sender) =>
-            {
-                return (await sender.Send(new GetUserQuery(new UserId(id))))
-                    .WithProblemDetails(x => Results.Ok(x));
-            })
+        app.MapGet("/{id}", async (int id, ISender sender) => 
+                (await sender.Send(new GetUserQuery(new UserId(id)))).OkOrProblemDetails())
             .WithName("GetUser")
             .Produces<UserDetailsDto>()
             .RequireAuthorization(Permission.ReadUser.ToString());
-
+        
+        app.MapGet("/me", async (ISender sender, IUserIdStorage userIdStorage) => 
+                (await sender.Send(new GetUserQuery(userIdStorage.UserId!))).OkOrProblemDetails())
+            .Produces<UserDetailsDto>()
+            .RequireAuthorization(Permission.ReadUser.ToString());
+        
         app.MapPost("/", async (CreateUserCommand command, ISender sender) =>
             {
                 return (await sender.Send(command))

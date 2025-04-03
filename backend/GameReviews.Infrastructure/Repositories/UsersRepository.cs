@@ -14,6 +14,14 @@ internal sealed class UsersRepository(ApplicationWriteDbContext context)
     {
         await context.UsersGames.AddAsync(gameUserRelation);
     }
+
+    public async Task<UserEntity?> GetWithRefreshTokens(UserId id)
+    {
+        return await context.Users
+            .Include(u => u.RefreshTokens)
+            .FirstOrDefaultAsync(u => u.Id == id);
+    }
+
     public async Task<bool> UserHasGameAsync(UserId userId, GameId gameId)
     {
         return await context.UsersGames.AnyAsync(x => x.UsersId == userId && x.GamesId == gameId);
@@ -30,7 +38,9 @@ internal sealed class UsersRepository(ApplicationWriteDbContext context)
 
     public async Task<UserEntity?> GetByUsernameAsync(string username)
     {
-        return await context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        return await context.Users
+            .Include(u => u.RefreshTokens)
+            .FirstOrDefaultAsync(u => u.Username == username);
     }
     public async Task<UserEntity?> GetByEmailAsync(string email)
     {

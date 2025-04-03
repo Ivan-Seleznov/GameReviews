@@ -12,11 +12,10 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
         
         builder.HasKey(r => r.Id);
 
-        builder.HasOne<UserEntity>() 
+        builder.HasOne<UserEntity>()
             .WithMany(u => u.RefreshTokens)
-            .HasForeignKey(rt => rt.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
+            .HasForeignKey(rt => rt.UserId);
+        
         builder.Property(r => r.Id)
             .HasConversion(userId => userId.Value,
                 value => new(value))
