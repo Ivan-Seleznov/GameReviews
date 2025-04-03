@@ -12,6 +12,7 @@ export interface AuthContextType {
   signUpUser: (
     registerUserCommand: RegisterUserCommand
   ) => Promise<AuthUserDto>;
+  logout: () => void;
 }
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
