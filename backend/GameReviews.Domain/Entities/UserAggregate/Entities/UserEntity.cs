@@ -47,7 +47,8 @@ public class UserEntity : BaseEntity<UserId>, IAggregateRoot
 
     public void AddRefreshToken(string token, DateTime expiresIn)
     {
-        _refreshTokens.Add(new RefreshTokenEntity(token,expiresIn));
+        var refreshTokenEntity = new RefreshTokenEntity(token, expiresIn);
+        _refreshTokens.Add(refreshTokenEntity);
     }
     
     public Result UpdateRefreshToken(string oldToken, string newToken, DateTime expiresIn)

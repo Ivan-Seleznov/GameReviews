@@ -2,7 +2,6 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 const API_URL = import.meta.env.VITE_API_URL ?? "";
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
-  // TODO: Insert required headers
   config.headers["Content-Type"] = "application/json";
   config.headers["Accept"] = "application/json";
   return config;
