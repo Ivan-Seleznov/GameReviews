@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "@/entities/theme/ui/ThemeProvider";
+import { AppThemeProvider } from "@/entities/theme/ui/AppThemeProvider";
 import { GlobalStyles } from "../global/Global";
 import { AuthProvider } from "@/entities/auth/lib/AuthProvider";
 import { AuthModalProvider } from "@/features/auth/lib/AuthModalProvider";
@@ -15,9 +15,9 @@ export const Providers = ({ children }: Providers) => {
     <QueryClientProvider client={queryClient}>
       <GlobalStyles />
       <AuthProvider>
-        <AuthModalProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-        </AuthModalProvider>
+        <AppThemeProvider>
+          <AuthModalProvider>{children}</AuthModalProvider>
+        </AppThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

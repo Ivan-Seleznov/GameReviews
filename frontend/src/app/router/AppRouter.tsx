@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { Layout } from "../layout";
 //import { GamesPage } from "@/pages/games/ui/GamesPage";
 //import { GamePage } from "@/pages/game";
@@ -38,7 +42,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <h1>Home page</h1>,
+        element: <Navigate to={"/games"} />,
+      },
+      {
+        path: "/about",
+        element: "NOT IMPLEMENTED",
       },
       {
         path: "/games",
@@ -64,8 +72,8 @@ const router = createBrowserRouter([
   },
 ]);
 export const AppRouter = () => {
-  const { theme } = useTheme();
-  console.log("theme " + theme);
+  const theme = useTheme();
+  console.log("theme ", theme);
 
   return <RouterProvider router={router} />;
 };

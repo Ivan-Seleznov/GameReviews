@@ -28,7 +28,11 @@ export const ProductCard = ({
             {description && (
               <Typography
                 variant="body2"
-                sx={{ color: "text.secondary", maxHeight: "100%" }}
+                sx={{
+                  color: "text.secondary",
+                  maxHeight: "100%",
+                  overflow: "hidden",
+                }}
               >
                 {description}
               </Typography>

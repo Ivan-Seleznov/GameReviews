@@ -31,11 +31,3 @@ export const FooterListStyled = styled.ul`
 export const FooterListItemStyled = styled.li`
   margin: 5px 0;
 `;
-
-export const FooterLinkStyled = styled.a`
-  text-decoration: none;
-  color: inherit;
-  &:hover {
-    text-decoration: underline;
-  }
-`;

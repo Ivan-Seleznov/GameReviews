@@ -3,8 +3,6 @@ import styled from "styled-components";
 export const HeaderContainer = styled.header`
   width: 100%;
   height: 55px;
-  background-color: ${({ theme }) => theme.body};
-  color: ${({ theme }) => theme.text};
   user-select: none;
 `;
 

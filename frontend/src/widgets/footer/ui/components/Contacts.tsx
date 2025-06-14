@@ -3,8 +3,8 @@ import {
   FooterHeaderStyled,
   FooterListStyled,
   FooterListItemStyled,
-  FooterLinkStyled,
 } from "../Footer.styled";
+import { FooterLink } from "./FooterLink";
 
 export const Contacts = () => {
   return (
@@ -12,13 +12,15 @@ export const Contacts = () => {
       <FooterHeaderStyled>Contacts</FooterHeaderStyled>
       <FooterListStyled>
         <FooterListItemStyled>
-          <FooterLinkStyled href="#">Telegram</FooterLinkStyled>
+          <FooterLink href="#">Telegram</FooterLink>
         </FooterListItemStyled>
         <FooterListItemStyled>
-          <FooterLinkStyled href="#">Email</FooterLinkStyled>
+          <FooterLink href="mailto:ivan.selezniov228333@gmail.com">
+            Email
+          </FooterLink>
         </FooterListItemStyled>
         <FooterListItemStyled>
-          <FooterLinkStyled href="#">Instagram</FooterLinkStyled>
+          <FooterLink href="#">Instagram</FooterLink>
         </FooterListItemStyled>
       </FooterListStyled>
     </FooterColStyled>
