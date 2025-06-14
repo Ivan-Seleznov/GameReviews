@@ -1,10 +1,10 @@
 import {
   FooterColStyled,
   FooterHeaderStyled,
-  FooterLinkStyled,
   FooterListItemStyled,
   FooterListStyled,
 } from "../Footer.styled";
+import { FooterLink } from "./FooterLink";
 
 export const AboutMe = () => {
   return (
@@ -12,13 +12,19 @@ export const AboutMe = () => {
       <FooterHeaderStyled>About me</FooterHeaderStyled>
       <FooterListStyled>
         <FooterListItemStyled>
-          <FooterLinkStyled href="#">Github</FooterLinkStyled>
+          <FooterLink href="https://github.com/Ivan-Seleznov">
+            Github
+          </FooterLink>
         </FooterListItemStyled>
         <FooterListItemStyled>
-          <FooterLinkStyled href="#">CV</FooterLinkStyled>
+          <FooterLink href="https://github.com/Ivan-Seleznov/GameReviews">
+            Project Repository
+          </FooterLink>
         </FooterListItemStyled>
         <FooterListItemStyled>
-          <FooterLinkStyled href="#">Portfolio</FooterLinkStyled>
+          <FooterLink href="https://github.com/Ivan-Seleznov">
+            CV / Portfolio
+          </FooterLink>
         </FooterListItemStyled>
       </FooterListStyled>
     </FooterColStyled>

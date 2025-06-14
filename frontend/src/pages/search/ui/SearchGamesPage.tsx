@@ -49,17 +49,6 @@ export const SearchGamesPage = () => {
     <GamesPageWrapper>
       <SearchGamesContent>
         <SearchGamesTopContent>
-          <Pagination
-            count={
-              gamesList
-                ? Math.ceil(gamesList.totalCount / gamesList.pageSize)
-                : 0
-            }
-            onChange={(_, number) =>
-              navigate(`?name=${gameName}&page=${number}`)
-            }
-            page={page}
-          />
           <Typography variant="h4">{`Results for "${gameName}": ${
             (!gamesList || gamesList.totalCount === 0) && !isFetching
               ? `No results`
@@ -70,6 +59,14 @@ export const SearchGamesPage = () => {
           } on page`}</Typography>
         </SearchGamesTopContent>
         <GamesList type="flex" games={gamesList ? gamesList.items : []} />
+        <Pagination
+          count={
+            gamesList ? Math.ceil(gamesList.totalCount / gamesList.pageSize) : 0
+          }
+          onChange={(_, number) => navigate(`?name=${gameName}&page=${number}`)}
+          page={page}
+          sx={{ my: "20px" }}
+        />
       </SearchGamesContent>
     </GamesPageWrapper>
   );

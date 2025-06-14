@@ -3,8 +3,8 @@ import {
   FooterHeaderStyled,
   FooterListStyled,
   FooterListItemStyled,
-  FooterLinkStyled,
 } from "../Footer.styled";
+import { FooterLink } from "./FooterLink";
 
 export const UsefulLinks = () => {
   return (
@@ -12,13 +12,19 @@ export const UsefulLinks = () => {
       <FooterHeaderStyled>Useful links</FooterHeaderStyled>
       <FooterListStyled>
         <FooterListItemStyled>
-          <FooterLinkStyled href="#">Games</FooterLinkStyled>
+          <FooterLink external={false} href="/games">
+            Games
+          </FooterLink>
         </FooterListItemStyled>
         <FooterListItemStyled>
-          <FooterLinkStyled href="#">Reviews</FooterLinkStyled>
+          <FooterLink external={false} href="/reviews">
+            Reviews
+          </FooterLink>
         </FooterListItemStyled>
         <FooterListItemStyled>
-          <FooterLinkStyled href="#">Profile</FooterLinkStyled>
+          <FooterLink external={false} href="/profile">
+            Profile
+          </FooterLink>
         </FooterListItemStyled>
       </FooterListStyled>
     </FooterColStyled>

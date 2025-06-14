@@ -1,17 +1,23 @@
-export interface AppTheme {
-  body: string;
-  text: string;
-}
+import { createTheme } from "@mui/material";
+import { Theme as MuiTheme } from "@mui/material/styles";
+
 declare module "styled-components" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  export interface DefaultTheme extends AppTheme {}
+  export interface DefaultTheme extends MuiTheme {}
 }
 
-export const lightTheme: AppTheme = {
-  body: "#FFFFFF",
-  text: "#000000",
-};
-export const darkTheme: AppTheme = {
-  body: "#000000",
-  text: "#FFFFFF",
-};
+export const lightTheme = createTheme({
+  palette: {
+    primary: { main: "#1976d2" },
+    background: { default: "#f5f5f5", paper: "#fff" },
+  },
+  typography: { fontFamily: '"Inter", sans-serif' },
+});
+
+export const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: { main: "#90caf9" },
+    background: { default: "#121212", paper: "#1d1d1d" },
+  },
+  typography: { fontFamily: '"Inter", sans-serif' },
+});
