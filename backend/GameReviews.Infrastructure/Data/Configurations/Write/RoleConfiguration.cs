@@ -17,7 +17,13 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder.HasMany<PermissionEntity>()
             .WithMany()
-            .UsingEntity<RolePermission>();
+            .UsingEntity<RolePermission>(
+                r => r.HasOne<PermissionEntity>()
+                    .WithMany()
+                    .HasForeignKey(e => e.PermissionsId),
+                l => l.HasOne<Role>()
+                    .WithMany()
+                    .HasForeignKey(e => e.RolesId));
         
         /*builder.HasMany<UserEntity>()
             .WithMany();*/

@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GameReviews.Infrastructure.Data.Configurations.Write;
-internal sealed class GamesUsersConfiguration : IEntityTypeConfiguration<GameUserRelationship>
+internal sealed class GameUserConfiguration : IEntityTypeConfiguration<GameUserRelationship>
 {
     public void Configure(EntityTypeBuilder<GameUserRelationship> builder)
     {
-        builder.ToTable(TableNames.UsersGames);
+        builder.ToTable(TableNames.UserGame);
 
-        builder.HasKey(x => new { x.UsersId, GameId = x.GamesId });
+        builder.HasKey(x => new { x.GamesId, x.UsersId });
 
         builder.HasOne<UserEntity>()
             .WithMany()

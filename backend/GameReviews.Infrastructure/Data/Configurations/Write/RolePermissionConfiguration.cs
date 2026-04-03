@@ -11,12 +11,9 @@ internal sealed class RolePermissionConfiguration : IEntityTypeConfiguration<Rol
 {
     public void Configure(EntityTypeBuilder<RolePermission> builder)
     {
-        builder.ToTable(TableNames.RolePermissions);
+        builder.ToTable(TableNames.RolePermission);
         
-        builder.Property(r => r.PermissionEntityId)
-            .HasColumnName("PermissionId");
-        
-        builder.HasKey(r => new { r.RoleId, PermissionsId = r.PermissionEntityId });
+        builder.HasKey(r => new { r.RolesId, r.PermissionsId });
         
         builder.HasData(CreateRolePermissions());
     }

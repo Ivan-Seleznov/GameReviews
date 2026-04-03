@@ -16,8 +16,6 @@ public class ApplicationReadDbContext : DbContext, IReadApplicationDbContext
     public DbSet<UserReadEntity> Users { get; set; }
     public DbSet<GameReadEntity> Games { get; set; }
     public DbSet<ReviewReadEntity> Reviews { get; set; }
-    public DbSet<GameUserReadEntity> UsersGames { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

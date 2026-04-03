@@ -2,6 +2,7 @@
 
 public static class PagingDefaults
 {
+    public const int GetReviewByGamePageSize = 5;
     public const int SearchPageSize = 10;
     public const int FilterPageSize = 20;
     

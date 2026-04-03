@@ -6,15 +6,15 @@ using GameReviews.Domain.Entities.RolesAggregate.Entities;
 namespace GameReviews.Domain.Entities.RolePermissionAggregate.Entities;
 public class RolePermission : IAggregateRoot
 {
-    public int RoleId { get; private set; }
-    public int PermissionEntityId { get; private set; }
+    public int RolesId { get; private set; }
+    public int PermissionsId { get; private set; }
 
     private RolePermission() { }
 
-    private RolePermission(int roleId, int permissionsId)
+    private RolePermission(int rolesId, int permissionsId)
     {
-        RoleId = roleId;
-        PermissionEntityId = permissionsId;
+        RolesId = rolesId;
+        PermissionsId = permissionsId;
     }
     public static RolePermission Create(Role role, Permission permission)
     {

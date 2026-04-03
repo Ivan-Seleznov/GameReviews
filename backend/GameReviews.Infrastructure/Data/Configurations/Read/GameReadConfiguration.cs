@@ -14,8 +14,8 @@ internal class GameReadConfiguration : IEntityTypeConfiguration<GameReadEntity>
         builder.HasKey(x => x.Id);
 
         builder.HasMany(x => x.Users)
-            .WithMany()
-            .UsingEntity<GameUserReadEntity>();
+            .WithMany(x => x.Games)
+            .UsingEntity(TableNames.UserGame);
 
         builder.Property(x => x.Id)
             .HasConversion(x => x.Value, l => new GameId(l))

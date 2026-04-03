@@ -23,7 +23,7 @@ public class ApplicationWriteDbContext : DbContext
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<GameEntity> Games { get; set; }
     public DbSet<ReviewEntity> Reviews { get; set; }
-    public DbSet<GameUserRelationship> UsersGames { get; set; }
+    public DbSet<GameUserRelationship> UserGames { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

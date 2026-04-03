@@ -15,10 +15,6 @@ internal class UserReadConfiguration : IEntityTypeConfiguration<UserReadEntity>
 
         builder.Property(u => u.Id)
             .ValueGeneratedOnAdd();
-
-        builder.HasMany(u => u.Games)
-            .WithMany(g => g.Users)
-            .UsingEntity<GameUserReadEntity>();
         
         builder.Property(u => u.Username)
             .IsRequired()

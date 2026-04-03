@@ -1,4 +1,5 @@
-﻿using GameReviews.Domain.Entities.UserAggregate;
+﻿using GameReviews.Application.Common.Models.ReadEntities;
+using GameReviews.Domain.Entities.UserAggregate;
 using GameReviews.Domain.Entities.UserAggregate.Entities;
 using GameReviews.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +15,13 @@ public class PermissionService : IPermissionService
 
     public async Task<HashSet<string>> GetPermissionsAsync(UserId userId)
     {
-        //use read context
-        var roles = await _context.Users
-            .Include(u => u.Roles)
-            .ThenInclude(r => r.Permissions)
-            .Where(u => u.Id == userId)
-            .Select(u => u.Roles)
-            .ToArrayAsync();
-
-        return roles
-            .SelectMany(r => r)
-            .SelectMany(r => r.Permissions)
+        var roles = await _context.Set<UserRoleReadEntity>()
+            .Where(ur => ur.UsersId == userId)
+            .SelectMany(ur => ur.Role.Permissions)
             .Select(p => p.Name)
-            .ToHashSet();
+            .Distinct()
+            .ToListAsync();
+
+        return roles.ToHashSet();
     }
 }

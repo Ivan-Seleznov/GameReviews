@@ -9,16 +9,15 @@ internal class RolePermissionConfiguration : IEntityTypeConfiguration<RolePermis
 {
     public void Configure(EntityTypeBuilder<RolePermissionReadEntity> builder)
     {
-        builder.ToTable(TableNames.RolePermissions);
+        builder.ToTable(TableNames.RolePermission);
         
-        builder.HasKey(r => new { r.RoleId, r.PermissionId });
+        builder.HasKey(r => new { r.RolesId, r.PermissionsId });
 
         builder.HasOne<RoleReadEntity>()
             .WithMany()
-            .HasForeignKey(r => r.RoleId);
+            .HasForeignKey(r => r.RolesId);
         builder.HasOne<PermissionReadEntity>()
             .WithMany()
-            .HasForeignKey(r => r.PermissionId);
-
+            .HasForeignKey(r => r.PermissionsId);
     }
 }

@@ -6,9 +6,9 @@ internal static class TableNames
     internal const string Permissions = nameof(Permissions);
     internal const string Users = nameof(Users);
     internal const string Games = nameof(Games);
-    internal const string Reviews = "ReviewEntity";
-    internal const string UsersGames = "GameEntityUserEntity";
-    internal const string RefreshTokens = "RefreshTokenEntity";
-    internal const string RolePermissions = "RolePermission";
-    internal const string UserRoleRelationships = "RoleUserEntity";
+    internal const string Reviews = nameof(Reviews);
+    internal const string UserGame = nameof(UserGame);
+    internal const string RefreshTokens = nameof(RefreshTokens);
+    internal const string RolePermission = nameof(RolePermission);
+    internal const string UserRole = nameof(UserRole);
 }

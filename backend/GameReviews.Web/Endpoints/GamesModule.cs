@@ -1,15 +1,20 @@
-﻿using Carter;
+﻿using AutoMapper;
+using Carter;
 using GameReviews.Application.Common;
+using GameReviews.Application.Common.Constants;
 using GameReviews.Application.Common.Models.Dtos.Game;
+using GameReviews.Application.Common.Models.Dtos.Review;
 using GameReviews.Application.Common.Models.GameDetails;
 using GameReviews.Application.Common.PagedList;
 using GameReviews.Application.Games.Commands;
 using GameReviews.Application.Games.Queries.GetGame;
 using GameReviews.Application.Games.Queries.GetGames;
 using GameReviews.Application.Games.Queries.SearchGames;
+using GameReviews.Application.Reviews.Queries.GetReviewsByGame;
 using GameReviews.Application.Users.Commands.AddGame;
 using GameReviews.Domain.Common.Authorization;
 using GameReviews.Domain.Entities.GameAggregate.Entities;
+using GameReviews.Web.Common.Requests;
 using GameReviews.Web.Extensions;
 using MediatR;
 
@@ -66,5 +71,19 @@ public class GamesModule : CarterModule
             })
             .Produces<GameDetailsDto>()
             .RequireAuthorization(Permission.ManageUser.ToString());
+
+        app.MapGet("/{gameId}/reviews",
+                async ([AsParameters] GetReviewsByGameRequest request, ISender sender) =>
+                {
+                    var query = new GetReviewsByGameQuery(
+                        new GameId(request.GameId),
+                        request.SortOrder!,
+                        request.Page ?? 1,
+                        request.PageSize ?? PagingDefaults.GetReviewByGamePageSize);
+
+                    return (await sender.Send(query))
+                        .OkOrProblemDetails();
+                })
+            .Produces<ReviewForGameDto>();
     }
 }

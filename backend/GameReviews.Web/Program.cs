@@ -54,6 +54,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     await app.ApplyMigrations();
+    await app.SeedAdminAsync();
 }
 else
 {

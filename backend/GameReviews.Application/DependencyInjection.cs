@@ -20,6 +20,8 @@ public static class DependencyInjection
             
             conf.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
             conf.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            
+            conf.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PaginationBehavior<,>));
         });
 
         services.AddValidatorsFromAssembly(assembly, includeInternalTypes: true);

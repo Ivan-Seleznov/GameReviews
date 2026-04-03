@@ -17,8 +17,6 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<UserEntity>
 
         builder.Property(u => u.Id)
             .ValueGeneratedOnAdd();
-
-        //builder.Property("_rolesIds");
         
         builder.Property(u => u.Username)
             .IsRequired()

@@ -110,42 +110,45 @@ namespace GameReviews.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId", "GameId")
-                        .IsUnique();
+                    b.HasIndex("GameId")
+                        .HasDatabaseName("IX_Review_GameId");
 
-                    b.ToTable("ReviewEntity", (string)null);
+                    b.HasIndex("AuthorId", "GameId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Review_User_Game");
+
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("GameReviews.Domain.Entities.RolePermissionAggregate.Entities.RolePermission", b =>
                 {
-                    b.Property<int>("RoleId")
+                    b.Property<int>("RolesId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PermissionEntityId")
-                        .HasColumnType("integer")
-                        .HasColumnName("PermissionId");
+                    b.Property<int>("PermissionsId")
+                        .HasColumnType("integer");
 
-                    b.HasKey("RoleId", "PermissionEntityId");
+                    b.HasKey("RolesId", "PermissionsId");
 
-                    b.HasIndex("PermissionEntityId");
+                    b.HasIndex("PermissionsId");
 
                     b.ToTable("RolePermission", (string)null);
 
                     b.HasData(
                         new
                         {
-                            RoleId = 1,
-                            PermissionEntityId = 1
+                            RolesId = 1,
+                            PermissionsId = 1
                         },
                         new
                         {
-                            RoleId = 2,
-                            PermissionEntityId = 2
+                            RolesId = 2,
+                            PermissionsId = 2
                         },
                         new
                         {
-                            RoleId = 2,
-                            PermissionEntityId = 1
+                            RolesId = 2,
+                            PermissionsId = 1
                         });
                 });
 
@@ -203,7 +206,7 @@ namespace GameReviews.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokenEntity", (string)null);
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("GameReviews.Domain.Entities.UserAggregate.Entities.UserEntity", b =>
@@ -242,51 +245,66 @@ namespace GameReviews.Infrastructure.Migrations
 
             modelBuilder.Entity("GameReviews.Domain.Entities.UserGameRelationAggregate.Entities.GameUserRelationship", b =>
                 {
-                    b.Property<int>("UsersId")
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("UsersId"), 1L, null, null, null, null, null);
-
                     b.Property<long>("GamesId")
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<long>("GamesId"), 1L, null, null, null, null, null);
 
-                    b.HasKey("UsersId", "GamesId");
-
-                    b.HasIndex("GamesId");
-
-                    b.ToTable("GameEntityUserEntity", (string)null);
-                });
-
-            modelBuilder.Entity("GameReviews.Domain.Entities.UserRoleAggregate.Entities.UserRoleRelationshipAggregate", b =>
-                {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("UsersId")
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("UsersId"), 1L, null, null, null, null, null);
 
-                    b.HasKey("RolesId", "UsersId");
+                    b.HasKey("GamesId", "UsersId");
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("RoleUserEntity", (string)null);
+                    b.ToTable("UserGame", (string)null);
+                });
+
+            modelBuilder.Entity("GameReviews.Domain.Entities.UserRoleAggregate.Entities.UserRoleRelationshipAggregate", b =>
+                {
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.HasIdentityOptions(b.Property<int>("UsersId"), 1L, null, null, null, null, null);
+
+                    b.Property<int>("RolesId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UsersId", "RolesId");
+
+                    b.HasIndex("RolesId");
+
+                    b.ToTable("UserRole", (string)null);
+                });
+
+            modelBuilder.Entity("GameReviews.Domain.Entities.ReviewAggregate.Entities.ReviewEntity", b =>
+                {
+                    b.HasOne("GameReviews.Domain.Entities.UserAggregate.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameReviews.Domain.Entities.GameAggregate.Entities.GameEntity", null)
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GameReviews.Domain.Entities.RolePermissionAggregate.Entities.RolePermission", b =>
                 {
                     b.HasOne("GameReviews.Domain.Entities.PermissionAggregate.Entities.PermissionEntity", null)
                         .WithMany()
-                        .HasForeignKey("PermissionEntityId")
+                        .HasForeignKey("PermissionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GameReviews.Domain.Entities.RolesAggregate.Entities.Role", null)
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -296,7 +314,7 @@ namespace GameReviews.Infrastructure.Migrations
                     b.HasOne("GameReviews.Domain.Entities.UserAggregate.Entities.UserEntity", null)
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

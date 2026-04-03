@@ -15,9 +15,5 @@ internal class RoleReadConfiguration : IEntityTypeConfiguration<RoleReadEntity>
         builder.HasMany(r => r.Permissions)
             .WithMany()
             .UsingEntity<RolePermissionReadEntity>();
-        
-        builder.HasMany(r => r.Users)
-            .WithMany(r => r.Roles)
-            .UsingEntity<UserRoleReadEntity>();
     }
 }

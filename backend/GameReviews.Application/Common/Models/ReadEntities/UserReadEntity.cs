@@ -10,5 +10,4 @@ public class UserReadEntity
     public string PasswordHash { get; set; }
     public ICollection<RefreshTokenReadEntity> RefreshTokens { get; set; } = new List<RefreshTokenReadEntity>();
     public ICollection<GameReadEntity> Games { get; set; } = new List<GameReadEntity>();
-    public ICollection<RoleReadEntity> Roles { get; set; } = new List<RoleReadEntity>();
 }

@@ -11,9 +11,9 @@ internal sealed class UserRoleConfiguration : IEntityTypeConfiguration<UserRoleR
 {
     public void Configure(EntityTypeBuilder<UserRoleRelationshipAggregate> builder)
     {
-        builder.ToTable(TableNames.UserRoleRelationships);
+        builder.ToTable(TableNames.UserRole);
         
-        builder.HasKey(ur => new { ur.RolesId, ur.UsersId });
+        builder.HasKey(ur => new { ur.UsersId, ur.RolesId });
         
         builder.HasOne<UserEntity>()
             .WithMany()

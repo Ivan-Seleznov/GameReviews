@@ -8,10 +8,11 @@ import {
   PlatformImage,
   PlatformsContainer,
 } from "./GamePage.styled";
-import { Skeleton, Typography } from "@mui/material";
+import { Box, Skeleton, Typography } from "@mui/material";
 import { getFormattedDate, getFormattedImageUrl } from "@/shared/lib";
 import { useGameQuery } from "@/entities/game";
 import { GameInfoLabel } from "./GameInfoLabel";
+import AddReview from "./Review/AddReview";
 
 const logos = [
   "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PlayStation_4_logo_and_wordmark.svg/2560px-PlayStation_4_logo_and_wordmark.svg.png",
@@ -87,6 +88,7 @@ export const GamePage = () => {
         </GameContent>
       </GameContentWrapper>
       <Typography>{game.description}</Typography>
+      <AddReview gameId={gameId} />
     </GamePageWrapper>
   );
 };
